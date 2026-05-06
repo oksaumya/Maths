@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Discrete Mathematics – Complete Study Notes</title>
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)'], ['$','$']], displayMath: [['\\[','\\]'], ['$$','$$']] },
+    options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root {
+    --bg: #f7f8fc;
+    --sidebar-bg: #1e2235;
+    --sidebar-text: #c8cfe0;
+    --sidebar-active: #60a5fa;
+    --accent: #3b5bdb;
+    --text: #1a1d2e;
+    --muted: #64748b;
+    --def-bg: #eff6ff; --def-border: #3b82f6;
+    --thm-bg: #f0fdf4; --thm-border: #22c55e;
+    --ex-bg: #fff7ed;  --ex-border: #f97316;
+    --qa-bg: #faf5ff;  --qa-border: #a855f7;
+    --warn-bg: #fef2f2; --warn-border: #ef4444;
+    --code-bg: #1e2235; --code-text: #e2e8f0;
+    --card: #ffffff;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --radius: 10px;
+    --sidebar-w: 280px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; }
+
+  /* Sidebar */
+  #sidebar {
+    position: fixed; top: 0; left: 0; width: var(--sidebar-w);
+    height: 100vh; background: var(--sidebar-bg); overflow-y: auto;
+    padding: 24px 0; z-index: 100;
+    scrollbar-width: thin; scrollbar-color: #3b4560 transparent;
+  }
+  #sidebar h2 { color: #fff; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0 20px 12px; border-bottom: 1px solid #2d3555; margin-bottom: 8px; }
+  #sidebar ul { list-style: none; }
+  #sidebar ul li a { display: block; padding: 6px 20px; color: var(--sidebar-text); text-decoration: none; font-size: 0.85rem; transition: all 0.18s; border-left: 3px solid transparent; }
+  #sidebar ul li a:hover, #sidebar ul li a.active { color: var(--sidebar-active); border-left-color: var(--sidebar-active); background: rgba(96,165,250,0.07); }
+  #sidebar .unit-label { padding: 14px 20px 4px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4a5270; }
+
+  /* Main */
+  #main { margin-left: var(--sidebar-w); padding: 40px 48px; max-width: 960px; }
+  #main > header { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 2px solid #e2e8f0; }
+  #main > header h1 { font-size: 2rem; color: var(--accent); }
+  #main > header p { color: var(--muted); margin-top: 6px; }
+
+  /* Section headings */
+  .unit-title { font-size: 1.6rem; font-weight: 800; color: var(--accent); margin: 56px 0 8px; padding-top: 20px; border-top: 3px solid var(--accent); }
+  .unit-subtitle { color: var(--muted); margin-bottom: 32px; font-size: 0.95rem; }
+  h3.section-title { font-size: 1.2rem; font-weight: 700; color: #1e3a8a; margin: 36px 0 14px; }
+  h4 { font-size: 1rem; font-weight: 700; color: #374151; margin: 20px 0 8px; }
+
+  p { margin-bottom: 12px; }
+  ul, ol { padding-left: 22px; margin-bottom: 12px; }
+  li { margin-bottom: 5px; }
+
+  /* Blocks */
+  .block { border-left: 4px solid; border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 18px; margin: 18px 0; }
+  .block .block-title { font-weight: 700; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; opacity: 0.75; }
+  .def   { background: var(--def-bg);  border-color: var(--def-border); }
+  .def .block-title { color: #1d4ed8; }
+  .thm   { background: var(--thm-bg);  border-color: var(--thm-border); }
+  .thm .block-title { color: #15803d; }
+  .ex    { background: var(--ex-bg);   border-color: var(--ex-border); }
+  .ex .block-title  { color: #c2410c; }
+  .qa    { background: var(--qa-bg);   border-color: var(--qa-border); }
+  .qa .block-title  { color: #7e22ce; }
+  .warn  { background: var(--warn-bg); border-color: var(--warn-border); }
+  .warn .block-title { color: #b91c1c; }
+
+  /* Table */
+  table { border-collapse: collapse; margin: 16px 0; width: 100%; font-size: 0.92rem; }
+  th { background: var(--accent); color: #fff; padding: 8px 12px; text-align: left; }
+  td { padding: 7px 12px; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: #f1f5f9; }
+
+  /* Code */
+  pre { background: var(--code-bg); color: var(--code-text); border-radius: var(--radius); padding: 16px; overflow-x: auto; font-size: 0.88rem; margin: 14px 0; font-family: 'Fira Code', 'Cascadia Code', monospace; }
+  code { background: #e8ecf5; border-radius: 4px; padding: 1px 5px; font-size: 0.88em; font-family: 'Fira Code', monospace; }
+
+  /* Q&A toggle */
+  details { margin: 10px 0; }
+  details summary { cursor: pointer; font-weight: 600; color: #7e22ce; padding: 6px 0; user-select: none; }
+  details summary::marker { color: var(--qa-border); }
+  details[open] summary { margin-bottom: 8px; }
+  .solution-body { padding: 10px 14px; background: #f9f5ff; border-radius: 8px; border: 1px solid #d8b4fe; }
+
+  /* Steps */
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; padding: 8px 0 8px 44px; position: relative; border-bottom: 1px dashed #e2e8f0; }
+  .steps li:last-child { border: none; }
+  .steps li::before { content: counter(step); position: absolute; left: 0; top: 8px; width: 28px; height: 28px; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; }
+
+  /* Formula box */
+  .formula { background: #1e2235; color: #e2e8f0; padding: 14px 20px; border-radius: var(--radius); margin: 14px 0; font-size: 1.05rem; text-align: center; }
+
+  /* Scroll-to-top */
+  #totop { position: fixed; bottom: 28px; right: 28px; background: var(--accent); color: #fff; border: none; border-radius: 50%; width: 42px; height: 42px; font-size: 1.2rem; cursor: pointer; box-shadow: var(--shadow); display: none; z-index: 200; }
+  #totop:hover { background: #2d4abf; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    #sidebar { width: 220px; }
+    #main { margin-left: 220px; padding: 24px 20px; }
+  }
+  @media (max-width: 640px) {
+    #sidebar { display: none; }
+    #main { margin-left: 0; padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <h2>Discrete Mathematics</h2>
+
+  <div class="unit-label">Unit 1 – Logic</div>
+  <ul>
+    <li><a href="#prop-logic">1.1 Propositional Logic</a></li>
+    <li><a href="#pred-logic">1.2 Predicate Logic &amp; Quantifiers</a></li>
+    <li><a href="#bool-algebra">1.3 Boolean Algebra</a></li>
+  </ul>
+
+  <div class="unit-label">Unit 2 – Proofs</div>
+  <ul>
+    <li><a href="#proof-def">2.1 Definitions &amp; Axiomatic Systems</a></li>
+    <li><a href="#rules-inf">2.2 Rules of Inference</a></li>
+    <li><a href="#proof-types">2.3 Types of Proofs</a></li>
+    <li><a href="#prog-correct">2.4 Program Correctness</a></li>
+  </ul>
+
+  <div class="unit-label">Unit 3 – Set Theory</div>
+  <ul>
+    <li><a href="#russell">3.1 Russell's Paradox</a></li>
+    <li><a href="#countable">3.2 Countability</a></li>
+    <li><a href="#uncountable">3.3 Uncountability</a></li>
+    <li><a href="#count-app">3.4 Applications in CS</a></li>
+  </ul>
+
+  <div class="unit-label">Unit 4 – Abstract Algebra</div>
+  <ul>
+    <li><a href="#group-axioms">4.1–4.4 Groups</a></li>
+    <li><a href="#order">4.5–4.6 Order &amp; Cyclic Groups</a></li>
+    <li><a href="#lagrange">4.7 Lagrange's Theorem</a></li>
+    <li><a href="#rings">4.8–4.9 Rings &amp; Poly Rings</a></li>
+    <li><a href="#fields">4.10–4.11 Fields &amp; Primitives</a></li>
+    <li><a href="#crypto">4.12 Cryptography</a></li>
+  </ul>
+
+  <div class="unit-label">Unit 5 – Advanced Counting</div>
+  <ul>
+    <li><a href="#recur-recur">5.1 Recurrence (Recursive Algos)</a></li>
+    <li><a href="#recur-dc">5.2 Recurrence (Divide &amp; Conquer)</a></li>
+    <li><a href="#master">5.3 Master Theorem</a></li>
+    <li><a href="#gen-func">5.4 Generating Functions</a></li>
+    <li><a href="#gf-count">5.5 GF in Counting</a></li>
+    <li><a href="#gf-recur">5.6 GF for Recurrences</a></li>
+  </ul>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+<header>
+  <h1>Discrete Mathematics – Complete Study Notes</h1>
+  <p>Logic &bull; Proofs &bull; Set Theory &bull; Abstract Algebra &bull; Advanced Counting</p>
+</header>
+
+<!-- ═══════════════════════════════════════════════
+     UNIT 1 – LOGIC
+═══════════════════════════════════════════════ -->
+<h2 class="unit-title" id="unit1">Unit 1 – Logic and its Applications</h2>
+<p class="unit-subtitle">Foundation of mathematical reasoning and digital circuits.</p>
+
+<!-- 1.1 -->
+<h3 class="section-title" id="prop-logic">1.1 Propositional Logic</h3>
+<p>A <strong>proposition</strong> is a declarative statement that is either <em>true (T)</em> or <em>false (F)</em>—never both. Propositional logic studies how propositions combine to form compound statements.</p>
+
+<div class="def block">
+  <div class="block-title">Definition – Proposition</div>
+  <p>A statement with a definite truth value. Examples:<br>
+  &#10004; "2 + 2 = 4" (T) &nbsp;&nbsp; &#10004; "Paris is in Germany" (F)<br>
+  &#10008; "What time is it?" (question — not a proposition)<br>
+  &#10008; "x &gt; 5" (open sentence, truth depends on x)</p>
+</div>
+
+<h4>Logical Connectives</h4>
+<table>
+  <tr><th>Symbol</th><th>Name</th><th>Meaning</th><th>True when …</th></tr>
+  <tr><td>¬p</td><td>Negation (NOT)</td><td>not p</td><td>p is F</td></tr>
+  <tr><td>p ∧ q</td><td>Conjunction (AND)</td><td>p and q</td><td>both T</td></tr>
+  <tr><td>p ∨ q</td><td>Disjunction (OR)</td><td>p or q</td><td>at least one T</td></tr>
+  <tr><td>p → q</td><td>Implication</td><td>if p then q</td><td>p is F, or both T</td></tr>
+  <tr><td>p ↔ q</td><td>Biconditional</td><td>p if and only if q</td><td>same truth value</td></tr>
+  <tr><td>p ⊕ q</td><td>XOR (Exclusive OR)</td><td>p exclusive or q</td><td>exactly one T</td></tr>
+</table>
+
+<h4>Truth Table for Implication (→)</h4>
+<p>The implication <strong>p → q</strong> is <em>false only when p is true and q is false</em>. In all other cases it is true. Think of it as a promise: the promise is only broken when you do the condition but not the result.</p>
+<table>
+  <tr><th>p</th><th>q</th><th>p→q</th><th>¬p∨q (equivalent form)</th></tr>
+  <tr><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+  <tr><td>T</td><td>F</td><td><strong>F</strong></td><td>F</td></tr>
+  <tr><td>F</td><td>T</td><td>T</td><td>T</td></tr>
+  <tr><td>F</td><td>F</td><td>T</td><td>T</td></tr>
+</table>
+
+<h4>Key Terminology</h4>
+<div class="def block">
+  <div class="block-title">Tautology, Contradiction, Contingency</div>
+  <ul>
+    <li><strong>Tautology:</strong> Always true for all inputs. E.g., p ∨ ¬p (Law of Excluded Middle).</li>
+    <li><strong>Contradiction:</strong> Always false. E.g., p ∧ ¬p.</li>
+    <li><strong>Contingency:</strong> Sometimes true, sometimes false. E.g., p ∧ q.</li>
+  </ul>
+</div>
+
+<h4>Important Logical Equivalences</h4>
+<table>
+  <tr><th>Law</th><th>Equivalence</th></tr>
+  <tr><td>Double Negation</td><td>¬(¬p) ≡ p</td></tr>
+  <tr><td>De Morgan's (AND)</td><td>¬(p ∧ q) ≡ ¬p ∨ ¬q</td></tr>
+  <tr><td>De Morgan's (OR)</td><td>¬(p ∨ q) ≡ ¬p ∧ ¬q</td></tr>
+  <tr><td>Implication Rewrite</td><td>p → q ≡ ¬p ∨ q</td></tr>
+  <tr><td>Contrapositive</td><td>p → q ≡ ¬q → ¬p</td></tr>
+  <tr><td>Absorption</td><td>p ∨ (p ∧ q) ≡ p</td></tr>
+  <tr><td>Distributive</td><td>p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r)</td></tr>
+</table>
+
+<div class="ex block">
+  <div class="block-title">Worked Example – Show p→q ≡ ¬p∨q</div>
+  <p>Build a truth table and verify column p→q equals column ¬p∨q:</p>
+  <table>
+    <tr><th>p</th><th>q</th><th>¬p</th><th>p→q</th><th>¬p∨q</th></tr>
+    <tr><td>T</td><td>T</td><td>F</td><td>T</td><td>T</td></tr>
+    <tr><td>T</td><td>F</td><td>F</td><td>F</td><td>F</td></tr>
+    <tr><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+    <tr><td>F</td><td>F</td><td>T</td><td>T</td><td>T</td></tr>
+  </table>
+  <p>Columns 4 and 5 are identical → equivalence confirmed ✓</p>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Propositional Logic</div>
+
+  <details>
+    <summary>Q1. Is (p ∨ q) ∧ ¬p → q a tautology?</summary>
+    <div class="solution-body">
+      <p><strong>Solution:</strong> We need: whenever (p∨q)∧¬p is T, q must also be T.</p>
+      <p>(p∨q)∧¬p is T only when p=F and q=T (¬p=T requires p=F; p∨q=T requires q=T when p=F).</p>
+      <p>In that case q=T, so the implication holds. In all other cases the hypothesis is F → implication is automatically T.</p>
+      <p><strong>Yes, it is a tautology</strong> (this is Disjunctive Syllogism).</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Write the contrapositive of: "If it rains, then the ground is wet."</summary>
+    <div class="solution-body">
+      <p>Let p = "It rains", q = "The ground is wet". Original: p → q.</p>
+      <p>Contrapositive: ¬q → ¬p.</p>
+      <p><strong>Answer: "If the ground is not wet, then it did not rain."</strong></p>
+      <p>The contrapositive is logically equivalent to the original.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3. Simplify ¬(p → q).</summary>
+    <div class="solution-body">
+      <p>p → q ≡ ¬p ∨ q</p>
+      <p>¬(p → q) ≡ ¬(¬p ∨ q) ≡ p ∧ ¬q &nbsp;[De Morgan's]</p>
+      <p><strong>Answer: p ∧ ¬q</strong> (p is true AND q is false — the only case when an implication fails).</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q4. Is (p ∧ q) → p always true?</summary>
+    <div class="solution-body">
+      <p>If p∧q is T → both p and q are T → p is T → implication is T.</p>
+      <p>If p∧q is F → false antecedent → implication is T.</p>
+      <p><strong>Yes, it is a tautology</strong> (Simplification rule of inference).</p>
+    </div>
+  </details>
+</div>
+
+<!-- 1.2 -->
+<h3 class="section-title" id="pred-logic">1.2 Predicate Logic &amp; Quantifiers</h3>
+<p>Propositional logic cannot express statements like "All students passed." Predicate logic adds <strong>predicates</strong> (properties) and <strong>quantifiers</strong> (all, some) to express such statements.</p>
+
+<div class="def block">
+  <div class="block-title">Definition – Predicate</div>
+  <p>A predicate P(x) is a statement containing a variable x. It becomes a proposition when x is assigned a specific value.</p>
+  <p>Example: P(x) = "x &gt; 5". P(10) is T, P(3) is F.</p>
+</div>
+
+<h4>Universal and Existential Quantifiers</h4>
+<table>
+  <tr><th>Quantifier</th><th>Symbol</th><th>Meaning</th><th>False when …</th></tr>
+  <tr><td>Universal</td><td>∀x P(x)</td><td>"For all x, P(x)"</td><td>At least one x makes P(x) false</td></tr>
+  <tr><td>Existential</td><td>∃x P(x)</td><td>"There exists x such that P(x)"</td><td>No x makes P(x) true</td></tr>
+</table>
+
+<h4>Negation of Quantifiers (De Morgan's for Quantifiers)</h4>
+<div class="thm block">
+  <div class="block-title">Theorem</div>
+  <p>¬(∀x P(x)) ≡ ∃x ¬P(x)</p>
+  <p>¬(∃x P(x)) ≡ ∀x ¬P(x)</p>
+  <p><em>Intuition:</em> "Not all students passed" ≡ "Some student did not pass."</p>
+</div>
+
+<h4>Nested Quantifiers — Order Matters!</h4>
+<table>
+  <tr><th>Statement</th><th>Meaning</th></tr>
+  <tr><td>∀x ∃y P(x,y)</td><td>For every x, there is <em>some</em> y that works (y may depend on x)</td></tr>
+  <tr><td>∃y ∀x P(x,y)</td><td>One single y works for <em>all</em> x (much stronger!)</td></tr>
+</table>
+
+<div class="ex block">
+  <div class="block-title">Example – Nested Quantifiers</div>
+  <p>Domain: real numbers. P(x,y) = "x + y = 0"</p>
+  <p>∀x ∃y P(x,y) → <strong>TRUE</strong> (for any x, choose y = −x)</p>
+  <p>∃y ∀x P(x,y) → <strong>FALSE</strong> (no single y satisfies x + y = 0 for all x)</p>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Predicate Logic</div>
+
+  <details>
+    <summary>Q1. Negate: "Every student has a laptop."</summary>
+    <div class="solution-body">
+      <p>Let L(x) = "x has a laptop", domain = students.</p>
+      <p>Original: ∀x L(x). Negation: ¬(∀x L(x)) ≡ ∃x ¬L(x).</p>
+      <p><strong>Answer: "There exists a student who does not have a laptop."</strong></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Express "Some birds cannot fly" using predicates.</summary>
+    <div class="solution-body">
+      <p>Let B(x) = "x is a bird", F(x) = "x can fly".</p>
+      <p><strong>Answer: ∃x (B(x) ∧ ¬F(x))</strong></p>
+      <p><em>Important:</em> Use ∧ (not →) with ∃. Writing ∃x (B(x) → ¬F(x)) would be true even if there are no birds, which is wrong!</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3. Negate: ∀x ∀y (x ≠ y → P(x,y))</summary>
+    <div class="solution-body">
+      <p>¬(∀x ∀y (x≠y → P(x,y)))</p>
+      <p>≡ ∃x ∃y ¬(x≠y → P(x,y))</p>
+      <p>≡ ∃x ∃y (x≠y ∧ ¬P(x,y)) &nbsp;[since ¬(A→B) ≡ A∧¬B]</p>
+      <p><strong>Answer: "There exist two distinct elements for which P(x,y) does not hold."</strong></p>
+    </div>
+  </details>
+</div>
+
+<!-- 1.3 -->
+<h3 class="section-title" id="bool-algebra">1.3 Boolean Algebra &amp; Computer Architecture Applications</h3>
+<p>Boolean Algebra is the mathematical foundation of digital circuits. Variables take values 0 (false) or 1 (true). The three basic operations are AND (·), OR (+), NOT (').</p>
+
+<h4>Boolean Laws</h4>
+<table>
+  <tr><th>Law</th><th>AND form</th><th>OR form</th></tr>
+  <tr><td>Identity</td><td>A · 1 = A</td><td>A + 0 = A</td></tr>
+  <tr><td>Null/Domination</td><td>A · 0 = 0</td><td>A + 1 = 1</td></tr>
+  <tr><td>Idempotent</td><td>A · A = A</td><td>A + A = A</td></tr>
+  <tr><td>Complement</td><td>A · A' = 0</td><td>A + A' = 1</td></tr>
+  <tr><td>De Morgan's</td><td>(A·B)' = A'+B'</td><td>(A+B)' = A'·B'</td></tr>
+  <tr><td>Absorption</td><td>A·(A+B) = A</td><td>A + A·B = A</td></tr>
+</table>
+
+<h4>Logic Gates</h4>
+<table>
+  <tr><th>Gate</th><th>Operation</th><th>Output 1 when …</th><th>Universal Gate?</th></tr>
+  <tr><td>AND</td><td>A · B</td><td>All inputs are 1</td><td>No</td></tr>
+  <tr><td>OR</td><td>A + B</td><td>At least one input is 1</td><td>No</td></tr>
+  <tr><td>NOT</td><td>A'</td><td>Input is 0</td><td>No</td></tr>
+  <tr><td>NAND</td><td>(A·B)'</td><td>Not all inputs are 1</td><td><strong>Yes</strong></td></tr>
+  <tr><td>NOR</td><td>(A+B)'</td><td>All inputs are 0</td><td><strong>Yes</strong></td></tr>
+  <tr><td>XOR</td><td>A ⊕ B</td><td>Exactly one input is 1</td><td>No</td></tr>
+</table>
+
+<div class="ex block">
+  <div class="block-title">Example – Simplify Boolean Expression</div>
+  <p>Simplify: F = AB' + AB + A'B</p>
+  <ol class="steps">
+    <li>Group first two terms: AB' + AB = A(B' + B) = A · 1 = A</li>
+    <li>Expression becomes: A + A'B</li>
+    <li>Apply consensus theorem: A + A'B = A + B</li>
+  </ol>
+  <p><strong>Result: F = A + B</strong></p>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Boolean Algebra</div>
+
+  <details>
+    <summary>Q1. Simplify F = A + A'B using Boolean laws.</summary>
+    <div class="solution-body">
+      <p>F = A + A'B</p>
+      <p>= (A + A')(A + B) &nbsp;[Distributive: x + yz = (x+y)(x+z)]</p>
+      <p>= 1 · (A + B) = A + B</p>
+      <p><strong>Answer: F = A + B</strong></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Implement XOR using only NAND gates.</summary>
+    <div class="solution-body">
+      <p>Circuit (4 NAND gates):</p>
+      <p>G1 = NAND(A, B)</p>
+      <p>G2 = NAND(A, G1)</p>
+      <p>G3 = NAND(B, G1)</p>
+      <p>Output = NAND(G2, G3)</p>
+      <p>Proof: NAND(G2,G3) = (G2·G3)' = ((A·G1)'·(B·G1)')' = A⊕B ✓</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3. Prove De Morgan's law ¬(A ∧ B) = ¬A ∨ ¬B using truth table.</summary>
+    <div class="solution-body">
+      <table>
+        <tr><th>A</th><th>B</th><th>A∧B</th><th>¬(A∧B)</th><th>¬A</th><th>¬B</th><th>¬A∨¬B</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      </table>
+      <p>Columns 4 and 7 are identical. ✓ Proved.</p>
+    </div>
+  </details>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     UNIT 2 – PROOFS
+═══════════════════════════════════════════════ -->
+<h2 class="unit-title" id="unit2">Unit 2 – Proofs</h2>
+<p class="unit-subtitle">Formal methods for establishing mathematical truth.</p>
+
+<!-- 2.1 -->
+<h3 class="section-title" id="proof-def">2.1 Definitions &amp; Axiomatic Systems</h3>
+
+<div class="def block">
+  <div class="block-title">Key Terminology</div>
+  <ul>
+    <li><strong>Axiom / Postulate:</strong> A statement assumed to be true without proof — the starting point of any mathematical system.</li>
+    <li><strong>Theorem:</strong> A statement proved rigorously from axioms and previously proved theorems.</li>
+    <li><strong>Lemma:</strong> A small helper theorem used as a stepping stone toward a larger theorem.</li>
+    <li><strong>Corollary:</strong> A result that follows immediately and easily from a theorem.</li>
+    <li><strong>Conjecture:</strong> A statement believed to be true but not yet formally proved (e.g., Goldbach's Conjecture).</li>
+    <li><strong>Proof:</strong> A finite sequence of logical deductions from axioms/hypotheses that establishes a theorem.</li>
+  </ul>
+</div>
+
+<div class="def block">
+  <div class="block-title">Axiomatic System – Peano Axioms for Natural Numbers</div>
+  <ol>
+    <li>0 is a natural number.</li>
+    <li>For every natural number n, S(n) (its successor) is a natural number.</li>
+    <li>0 is not the successor of any natural number.</li>
+    <li>If S(m) = S(n) then m = n (successors are injective).</li>
+    <li><strong>Induction Axiom:</strong> If P(0) is true and [P(n) → P(S(n))] for all n, then P(n) is true for all natural numbers n.</li>
+  </ol>
+</div>
+
+<!-- 2.2 -->
+<h3 class="section-title" id="rules-inf">2.2 Rules of Inference</h3>
+<p>Rules of inference are valid argument forms. If the premises are true, the conclusion must be true. They are the "legal moves" in a proof.</p>
+
+<table>
+  <tr><th>Rule Name</th><th>Premises</th><th>Conclusion</th><th>Example</th></tr>
+  <tr><td>Modus Ponens (MP)</td><td>p, p→q</td><td>q</td><td>"If it rains, ground is wet. It rains. ∴ Ground is wet."</td></tr>
+  <tr><td>Modus Tollens (MT)</td><td>¬q, p→q</td><td>¬p</td><td>"Ground not wet. If rain, ground wet. ∴ No rain."</td></tr>
+  <tr><td>Hypothetical Syllogism</td><td>p→q, q→r</td><td>p→r</td><td>Chain of implications.</td></tr>
+  <tr><td>Disjunctive Syllogism</td><td>p∨q, ¬p</td><td>q</td><td>"Heads or tails. Not heads. ∴ Tails."</td></tr>
+  <tr><td>Addition</td><td>p</td><td>p∨q</td><td>"It rains. ∴ It rains or snows."</td></tr>
+  <tr><td>Simplification</td><td>p∧q</td><td>p</td><td>"It rains and is cold. ∴ It rains."</td></tr>
+  <tr><td>Conjunction</td><td>p, q</td><td>p∧q</td><td>Combining two true facts.</td></tr>
+  <tr><td>Resolution</td><td>p∨q, ¬p∨r</td><td>q∨r</td><td>Used in automated theorem proving.</td></tr>
+</table>
+
+<div class="ex block">
+  <div class="block-title">Example – Chain Reasoning</div>
+  <p>Given: (1) p→q &nbsp; (2) q→r &nbsp; (3) p. &nbsp;Prove: r.</p>
+  <ol class="steps">
+    <li>From (1) and (2) by Hypothetical Syllogism: p→r</li>
+    <li>From p→r and (3) p by Modus Ponens: r ✓</li>
+  </ol>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Rules of Inference</div>
+
+  <details>
+    <summary>Q1. Identify the fallacy: "If it rains, the match is cancelled. The match was cancelled. Therefore it rained."</summary>
+    <div class="solution-body">
+      <p>This is the <strong>Fallacy of Affirming the Consequent</strong>.</p>
+      <p>Invalid form: p→q, q ⊬ p.</p>
+      <p>The match could have been cancelled for other reasons (pitch damage, no players, etc.).</p>
+      <p>Contrast with valid Modus Ponens (p→q, p ∴ q) — affirm the antecedent, not consequent.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. "It is hot or sunny. It is not hot." Conclude what you can.</summary>
+    <div class="solution-body">
+      <p>Premises: H ∨ S, ¬H.</p>
+      <p>By <strong>Disjunctive Syllogism</strong>: From H∨S and ¬H → conclude S.</p>
+      <p><strong>Answer: It is sunny.</strong></p>
+    </div>
+  </details>
+</div>
+
+<!-- 2.3 -->
+<h3 class="section-title" id="proof-types">2.3 Types of Proofs</h3>
+
+<h4>1. Direct Proof</h4>
+<p>Assume the hypothesis is true, then use logical steps to derive the conclusion directly.</p>
+<div class="ex block">
+  <div class="block-title">Example – If n is even, then n² is even</div>
+  <p>Assume n is even → n = 2k for some integer k.</p>
+  <p>Then n² = (2k)² = 4k² = 2(2k²). Since 2k² is an integer, n² is even. ∎</p>
+</div>
+
+<h4>2. Proof by Contrapositive</h4>
+<p>Instead of proving p→q, prove the logically equivalent ¬q→¬p.</p>
+<div class="ex block">
+  <div class="block-title">Example – If n² is odd, then n is odd</div>
+  <p>Contrapositive: "If n is even, then n² is even" — proved above! ∎</p>
+</div>
+
+<h4>3. Proof by Contradiction</h4>
+<p>Assume the statement is false; derive a logical contradiction, proving the statement must be true.</p>
+<div class="ex block">
+  <div class="block-title">Classic Example – √2 is Irrational</div>
+  <ol class="steps">
+    <li>Assume √2 is rational: √2 = p/q where p,q are integers with gcd(p,q)=1 (fully reduced).</li>
+    <li>Then 2 = p²/q², so p² = 2q² → p² is even → p is even → p = 2k for some k.</li>
+    <li>Substitute: (2k)² = 2q² → 4k² = 2q² → q² = 2k² → q² is even → q is even.</li>
+    <li>Both p and q are even, contradicting gcd(p,q) = 1. ✗</li>
+    <li>∴ Our assumption was wrong. √2 is irrational. ∎</li>
+  </ol>
+</div>
+
+<h4>4. Mathematical Induction</h4>
+<p>Used to prove statements about all natural numbers. Works like an infinite chain of dominoes.</p>
+<div class="thm block">
+  <div class="block-title">Structure of a Proof by Induction</div>
+  <p><strong>Base Case:</strong> Prove P(n₀) is true (usually n₀ = 0 or 1).</p>
+  <p><strong>Inductive Step:</strong> Assume P(k) is true (Inductive Hypothesis, IH). Using this assumption, prove P(k+1) is true.</p>
+  <p><strong>Conclusion:</strong> P(n) is true for all n ≥ n₀.</p>
+</div>
+<div class="ex block">
+  <div class="block-title">Example – Sum Formula</div>
+  <p>Prove: \(1 + 2 + \cdots + n = \dfrac{n(n+1)}{2}\)</p>
+  <ol class="steps">
+    <li><strong>Base case n=1:</strong> LHS = 1, RHS = 1·2/2 = 1. ✓</li>
+    <li><strong>IH:</strong> Assume \(1+2+\cdots+k = \dfrac{k(k+1)}{2}\) for some k ≥ 1.</li>
+    <li><strong>Prove for k+1:</strong> \(1+\cdots+k+(k+1) = \dfrac{k(k+1)}{2} + (k+1) = (k+1)\left(\dfrac{k}{2}+1\right) = \dfrac{(k+1)(k+2)}{2}\) ✓</li>
+  </ol>
+  <p>This matches the formula with n = k+1. ∎</p>
+</div>
+
+<h4>5. Proof by Cases</h4>
+<p>Divide all possibilities into a finite number of cases and prove the statement for each case.</p>
+<div class="ex block">
+  <div class="block-title">Example – n² + n is always even</div>
+  <p><strong>Case 1: n is even.</strong> n = 2k → n² + n = 4k² + 2k = 2(2k²+k). Even. ✓</p>
+  <p><strong>Case 2: n is odd.</strong> n = 2k+1 → n² + n = (2k+1)² + (2k+1) = 4k²+4k+1+2k+1 = 4k²+6k+2 = 2(2k²+3k+1). Even. ✓</p>
+  <p>Both cases give even → n² + n is always even. ∎</p>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Types of Proofs</div>
+
+  <details>
+    <summary>Q1. Prove: The sum of two odd integers is even. (Direct Proof)</summary>
+    <div class="solution-body">
+      <p>Let a = 2m+1 and b = 2n+1 be two odd integers.</p>
+      <p>a + b = (2m+1) + (2n+1) = 2m + 2n + 2 = 2(m+n+1).</p>
+      <p>Since m+n+1 is an integer, a+b is even. ∎</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Prove by induction: \(1^2 + 2^2 + \cdots + n^2 = \frac{n(n+1)(2n+1)}{6}\)</summary>
+    <div class="solution-body">
+      <p><strong>Base case n=1:</strong> LHS=1, RHS=1·2·3/6=1. ✓</p>
+      <p><strong>IH:</strong> Assume true for k.</p>
+      <p><strong>Prove for k+1:</strong></p>
+      <p>\(\frac{k(k+1)(2k+1)}{6} + (k+1)^2 = (k+1)\left[\frac{k(2k+1)}{6} + (k+1)\right]\)</p>
+      <p>\(= (k+1) \cdot \frac{k(2k+1) + 6(k+1)}{6} = (k+1) \cdot \frac{2k^2+7k+6}{6} = \frac{(k+1)(k+2)(2k+3)}{6}\) ✓ ∎</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3. Prove there are infinitely many primes. (Contradiction)</summary>
+    <div class="solution-body">
+      <p>Assume finitely many primes: p₁, p₂, …, pₙ.</p>
+      <p>Let N = p₁·p₂·⋯·pₙ + 1.</p>
+      <p>N is not divisible by any pᵢ (remainder 1 each time).</p>
+      <p>So N is either prime (a new prime!) or has a prime factor not in our list. Either way, contradicts our assumption. ∎</p>
+    </div>
+  </details>
+</div>
+
+<!-- 2.4 -->
+<h3 class="section-title" id="prog-correct">2.4 Program Correctness &amp; Loop Invariants</h3>
+
+<div class="def block">
+  <div class="block-title">Hoare Triple: {P} S {Q}</div>
+  <p>If precondition <strong>P</strong> is true before executing statement <strong>S</strong>, and S terminates, then postcondition <strong>Q</strong> is true afterward.</p>
+  <p>Example: {x = 5} x = x + 1 {x = 6}</p>
+</div>
+
+<div class="def block">
+  <div class="block-title">Loop Invariant</div>
+  <p>A condition that is true before the loop starts, remains true after each iteration, and after termination implies the desired result.</p>
+  <p>Three proof obligations:</p>
+  <ul>
+    <li><strong>Initialization:</strong> The invariant is true before the first iteration.</li>
+    <li><strong>Maintenance:</strong> If true before an iteration, it stays true after that iteration.</li>
+    <li><strong>Termination:</strong> When the loop ends, the invariant + exit condition gives the desired result.</li>
+  </ul>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Example – Loop Invariant for Computing n!</div>
+  <pre>result = 1; i = 1;
+while (i &lt;= n):
+    result = result * i
+    i = i + 1</pre>
+  <p><strong>Invariant:</strong> At the start of each iteration, <code>result = (i−1)!</code></p>
+  <p><strong>Initialization:</strong> Before loop: i=1, result=1 = (1−1)! = 0! = 1. ✓</p>
+  <p><strong>Maintenance:</strong> If result=(i−1)! at start, after body: result = (i−1)!·i = i!, and i increments, so new (i−1)! refers to what's now i!. ✓</p>
+  <p><strong>Termination:</strong> Loop exits when i=n+1. Invariant gives result = (n+1−1)! = n!. ✓</p>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Question</div>
+  <details>
+    <summary>Q1. State and verify a loop invariant for binary search.</summary>
+    <div class="solution-body">
+      <pre>low=0; high=n-1
+while (low &lt;= high):
+    mid = (low+high)/2
+    if A[mid]==target: return mid
+    elif A[mid] &lt; target: low = mid+1
+    else: high = mid-1
+return -1</pre>
+      <p><strong>Invariant:</strong> If target exists in A, it lies within A[low..high].</p>
+      <p><strong>Init:</strong> Before loop, A[low..high] = entire array. Invariant trivially holds. ✓</p>
+      <p><strong>Maintenance:</strong> If A[mid] &lt; target, target must be in right half → set low=mid+1 preserves invariant. Similarly for the other branch. ✓</p>
+      <p><strong>Termination:</strong> low &gt; high means search space is empty → target not present → return −1 is correct. ✓</p>
+    </div>
+  </details>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     UNIT 3 – SET THEORY
+═══════════════════════════════════════════════ -->
+<h2 class="unit-title" id="unit3">Unit 3 – Set Theory</h2>
+<p class="unit-subtitle">Foundations of mathematics and computability theory.</p>
+
+<!-- 3.1 -->
+<h3 class="section-title" id="russell">3.1 Russell's Paradox</h3>
+
+<div class="warn block">
+  <div class="block-title">The Paradox (Bertrand Russell, 1901)</div>
+  <p>In naive set theory, any property defines a set. Define:</p>
+  <p>\[ R = \{ S \mid S \notin S \} \quad \text{(the set of all sets that do NOT contain themselves)} \]</p>
+  <p><strong>The question:</strong> Does R contain itself?</p>
+  <ul>
+    <li>If R ∈ R → by definition, R ∉ R. Contradiction!</li>
+    <li>If R ∉ R → by definition, R ∈ R. Contradiction!</li>
+  </ul>
+  <p>Both cases lead to contradiction → naive set theory is <strong>inconsistent</strong>!</p>
+</div>
+
+<h4>The Barber Paradox (Informal Illustration)</h4>
+<p>In a village, the barber shaves every man who does not shave himself, and only those men. Who shaves the barber?</p>
+<ul>
+  <li>If barber shaves himself → he is someone who shaves himself → barber should NOT shave him. Contradiction!</li>
+  <li>If barber does not shave himself → he is someone who doesn't shave himself → barber SHOULD shave him. Contradiction!</li>
+</ul>
+<p>Conclusion: Such a barber cannot exist — and similarly, the "set of all sets" cannot exist.</p>
+
+<h4>Resolution: ZFC Axiomatic Set Theory</h4>
+<div class="thm block">
+  <div class="block-title">Zermelo-Fraenkel Set Theory (ZFC)</div>
+  <p>ZFC restricts set formation to avoid the paradox:</p>
+  <ul>
+    <li><strong>Axiom of Separation:</strong> You can only form a subset of an already existing set. You cannot form a set by collecting absolutely everything.</li>
+    <li><strong>No "set of all sets":</strong> In ZFC, there is no universal set. This prevents Russell's R from being formed.</li>
+    <li>All of useful mathematics can be developed within ZFC without the paradox.</li>
+  </ul>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions</div>
+  <details>
+    <summary>Q1. Why can't we just define a "set of all sets" in mathematics?</summary>
+    <div class="solution-body">
+      <p>If U = set of all sets exists, then R = {S ∈ U : S ∉ S} would be a valid set by the Separation Axiom.</p>
+      <p>But then R ∈ R ↔ R ∉ R — Russell's paradox again.</p>
+      <p>Therefore, a "set of all sets" cannot exist consistently. Instead, we use a "proper class" (collection too large to be a set) which is not itself a set and cannot be an element of other collections.</p>
+    </div>
+  </details>
+</div>
+
+<!-- 3.2 -->
+<h3 class="section-title" id="countable">3.2 Countability</h3>
+
+<div class="def block">
+  <div class="block-title">Definition – Countable Set</div>
+  <p>A set A is <strong>countable</strong> if there exists a bijection (one-to-one and onto function) f : A → ℕ, or equivalently, its elements can be listed in a sequence a₁, a₂, a₃, …</p>
+  <ul>
+    <li><strong>Finite sets</strong> are countable.</li>
+    <li><strong>Countably infinite</strong> sets are infinite but "listable" (same cardinality as ℕ).</li>
+    <li>Examples: ℕ, ℤ, ℚ, even numbers, prime numbers.</li>
+  </ul>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Example – ℤ (Integers) is Countable</div>
+  <p>Listing: 0, 1, −1, 2, −2, 3, −3, 4, −4, …</p>
+  <p>Bijection: f(n) maps natural number n to: 0 if n=0, n/2 if n is even and &gt;0, −(n+1)/2 if n is odd.</p>
+  <p>Every integer appears exactly once in the list. ✓</p>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Example – ℚ (Rationals) is Countable (Cantor's Zigzag)</div>
+  <p>Arrange positive rationals in a 2D grid (row i, column j → i/j):</p>
+  <pre>
+  1/1  1/2  1/3  1/4  ...
+  2/1  2/2  2/3  2/4  ...
+  3/1  3/2  3/3  3/4  ...
+  ...
+  </pre>
+  <p>Traverse diagonals: 1/1, 1/2, 2/1, 3/1, 2/2, 1/3, 1/4, 2/3, 3/2, 4/1, …</p>
+  <p>Skip duplicates (2/2 = 1/1). Every positive rational appears → ℚ⁺ is countable. Adding negatives and 0 keeps it countable. ✓</p>
+</div>
+
+<div class="thm block">
+  <div class="block-title">Theorem – Countable Union of Countable Sets is Countable</div>
+  <p>If A₁, A₂, A₃, … are all countable sets, then A₁ ∪ A₂ ∪ … is countable.</p>
+  <p><em>Proof idea:</em> Apply the same 2D zigzag technique — arrange elements in a grid and traverse diagonally.</p>
+</div>
+
+<!-- 3.3 -->
+<h3 class="section-title" id="uncountable">3.3 Uncountability</h3>
+
+<div class="thm block">
+  <div class="block-title">Cantor's Diagonal Argument – ℝ is Uncountable</div>
+  <p><strong>Theorem:</strong> The real numbers in (0,1) cannot be listed — they are uncountably infinite.</p>
+  <p><strong>Proof:</strong></p>
+  <ol class="steps">
+    <li>Suppose for contradiction all reals in (0,1) can be listed: r₁, r₂, r₃, …</li>
+    <li>Write each as an infinite decimal:<br>
+      r₁ = 0.d₁₁ d₁₂ d₁₃ …<br>
+      r₂ = 0.d₂₁ d₂₂ d₂₃ …<br>
+      r₃ = 0.d₃₁ d₃₂ d₃₃ …</li>
+    <li>Construct x = 0.x₁x₂x₃… where xᵢ ≠ dᵢᵢ (change each <em>diagonal</em> digit).</li>
+    <li>x ≠ r₁ (differs at position 1), x ≠ r₂ (position 2), x ≠ rₙ (position n).</li>
+    <li>So x is not in the list — contradiction! ∴ ℝ is uncountable. ∎</li>
+  </ol>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Diagonal Argument Illustrated</div>
+  <pre>
+r₁ = 0.<u>3</u>141592...   → diagonal digit: 3 → change to 5
+r₂ = 0.5<u>0</u>00000...   → diagonal digit: 0 → change to 5
+r₃ = 0.71<u>8</u>2818...   → diagonal digit: 8 → change to 5
+r₄ = 0.142<u>8</u>571...   → diagonal digit: 8 → change to 5
+  </pre>
+  <p>New number: x = 0.5555… This is NOT equal to any rᵢ in the list (differs at position i). Contradiction!</p>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions</div>
+
+  <details>
+    <summary>Q1. Is the set of all computer programs countable?</summary>
+    <div class="solution-body">
+      <p>Yes! A program is a finite string over a finite character set (ASCII).</p>
+      <p>The set of all finite strings over a finite alphabet is countable — list them in order of increasing length, then lexicographically.</p>
+      <p><strong>Deep implication:</strong> There are only countably many programs, but uncountably many functions ℕ→ℕ (since 𝒫(ℕ) is uncountable). Therefore, most mathematical functions cannot be computed by any program!</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Show that the power set 𝒫(ℕ) is uncountable.</summary>
+    <div class="solution-body">
+      <p>Suppose 𝒫(ℕ) is countable: list all subsets as S₁, S₂, S₃, …</p>
+      <p>Define the diagonal set: D = {n ∈ ℕ : n ∉ Sₙ}.</p>
+      <p>For each n: n ∈ D ↔ n ∉ Sₙ, so D ≠ Sₙ for any n.</p>
+      <p>But D ⊆ ℕ, so D should appear somewhere in the list. Contradiction!</p>
+      <p><strong>∴ 𝒫(ℕ) is uncountable.</strong></p>
+    </div>
+  </details>
+</div>
+
+<!-- 3.4 -->
+<h3 class="section-title" id="count-app">3.4 Applications in Computability and Automata</h3>
+
+<div class="thm block">
+  <div class="block-title">The Halting Problem is Undecidable (Turing, 1936)</div>
+  <p><strong>Claim:</strong> No program H can exist that, given any program P and input I, correctly decides whether P halts on I.</p>
+  <ol class="steps">
+    <li>Assume H(P, I) → "halts" or "loops" exists.</li>
+    <li>Construct D(P): run H(P, P); if H says "halts" → D loops forever; if H says "loops" → D halts.</li>
+    <li>Run D(D): if D halts → H(D,D) said "loops" → D should loop. Contradiction!<br>
+        If D loops → H(D,D) said "halts" → D should halt. Contradiction!</li>
+    <li>∴ H cannot exist. The Halting Problem is undecidable. ∎</li>
+  </ol>
+</div>
+
+<div class="def block">
+  <div class="block-title">Countability and Formal Languages</div>
+  <ul>
+    <li>The set {0,1}* of all finite binary strings is <strong>countably infinite</strong> (can be listed by length).</li>
+    <li>The set of all languages over {0,1} = 𝒫({0,1}*) is <strong>uncountable</strong>.</li>
+    <li>DFAs are finite structures → only countably many DFAs exist → only countably many regular languages.</li>
+    <li><strong>Conclusion:</strong> The vast majority of formal languages are not regular (and not even decidable)!</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     UNIT 4 – ABSTRACT ALGEBRA
+═══════════════════════════════════════════════ -->
+<h2 class="unit-title" id="unit4">Unit 4 – Abstract Algebra</h2>
+<p class="unit-subtitle">Algebraic structures powering modern cryptography and coding theory.</p>
+
+<!-- 4.1–4.4 -->
+<h3 class="section-title" id="group-axioms">4.1–4.4 Group Theory: Axioms and Examples</h3>
+
+<div class="def block">
+  <div class="block-title">Definition – Group (G, ★)</div>
+  <p>A <strong>group</strong> is a set G with a binary operation ★ satisfying exactly four axioms:</p>
+  <table>
+    <tr><th>Axiom</th><th>Statement</th><th>Meaning</th></tr>
+    <tr><td>G1 – Closure</td><td>∀ a,b ∈ G: a★b ∈ G</td><td>Operation stays inside the set</td></tr>
+    <tr><td>G2 – Associativity</td><td>(a★b)★c = a★(b★c)</td><td>Grouping doesn't matter</td></tr>
+    <tr><td>G3 – Identity</td><td>∃ e ∈ G: a★e = e★a = a</td><td>There is a "do nothing" element</td></tr>
+    <tr><td>G4 – Inverse</td><td>∀ a ∈ G, ∃ a⁻¹: a★a⁻¹ = e</td><td>Every element is "undoable"</td></tr>
+  </table>
+  <p>If additionally a★b = b★a for all a,b, the group is <strong>Abelian (commutative)</strong>.</p>
+</div>
+
+<h4>4.2 Additive Group ℤₙ = ({0,1,…,n−1}, +ₙ)</h4>
+<p>Elements are integers mod n; addition is done modulo n. Identity is 0. Inverse of a is n−a.</p>
+<div class="ex block">
+  <div class="block-title">Example – ℤ₅ = ({0,1,2,3,4}, +₅)</div>
+  <p>3 +₅ 4 = 7 mod 5 = 2. &nbsp; Identity: 0. &nbsp; Inverse of 3 = 5−3 = 2 (since 3+₅2=5≡0).</p>
+  <p>This is Abelian and cyclic, |ℤ₅| = 5.</p>
+</div>
+
+<h4>4.3 Multiplicative Group ℤₙ* = ({a : gcd(a,n)=1}, ×ₙ)</h4>
+<div class="def block">
+  <div class="block-title">Units Group ℤₙ*</div>
+  <p>Only elements coprime to n (gcd = 1) have multiplicative inverses mod n, so only they form a group.</p>
+  <p>|ℤₙ*| = φ(n) (Euler's totient function = count of integers from 1 to n coprime to n).</p>
+  <p>Example: ℤ₁₂* = {1,5,7,11}, φ(12) = 4.</p>
+</div>
+
+<h4>4.4 Other Important Groups</h4>
+<table>
+  <tr><th>Group</th><th>Operation</th><th>Order</th><th>Abelian?</th></tr>
+  <tr><td>(ℤ, +)</td><td>Integer addition</td><td>∞</td><td>Yes</td></tr>
+  <tr><td>(ℝ*, ×)</td><td>Nonzero real multiplication</td><td>∞</td><td>Yes</td></tr>
+  <tr><td>Sₙ (Symmetric group)</td><td>Permutation composition</td><td>n!</td><td>No (n≥3)</td></tr>
+  <tr><td>Dₙ (Dihedral group)</td><td>Symmetries of regular n-gon</td><td>2n</td><td>No (n≥3)</td></tr>
+  <tr><td>GL(n,ℝ)</td><td>Invertible n×n matrices</td><td>∞</td><td>No (n≥2)</td></tr>
+</table>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Groups</div>
+
+  <details>
+    <summary>Q1. Verify that ({1,−1}, ×) is a group.</summary>
+    <div class="solution-body">
+      <p><strong>Closure:</strong> 1×1=1, 1×(−1)=−1, (−1)×(−1)=1. All in {1,−1}. ✓</p>
+      <p><strong>Associativity:</strong> Multiplication is associative. ✓</p>
+      <p><strong>Identity:</strong> 1 is identity: 1×a = a×1 = a. ✓</p>
+      <p><strong>Inverse:</strong> 1⁻¹=1 and (−1)⁻¹=−1 (since (−1)×(−1)=1). ✓</p>
+      <p>Also commutative → Abelian group. ✓</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Find all elements of ℤ₁₀* and compute φ(10).</summary>
+    <div class="solution-body">
+      <p>ℤ₁₀* = {a : 1 ≤ a ≤ 9, gcd(a,10)=1}</p>
+      <p>gcd(1,10)=1 ✓, gcd(3,10)=1 ✓, gcd(7,10)=1 ✓, gcd(9,10)=1 ✓</p>
+      <p>ℤ₁₀* = {1, 3, 7, 9}</p>
+      <p>φ(10) = φ(2)×φ(5) = 1×4 = 4. So |ℤ₁₀*| = 4. ✓</p>
+    </div>
+  </details>
+</div>
+
+<!-- 4.5–4.6 -->
+<h3 class="section-title" id="order">4.5–4.6 Order of an Element, Cyclic Groups</h3>
+
+<div class="def block">
+  <div class="block-title">Order of an Element</div>
+  <p>The <strong>order of element g</strong> in group G is the smallest positive integer k such that g^k = e (identity).</p>
+  <p>Written: ord(g) or |g|. If no such k exists, g has infinite order.</p>
+</div>
+
+<div class="def block">
+  <div class="block-title">Cyclic Group</div>
+  <p>G is <strong>cyclic</strong> if ∃ g ∈ G such that G = {e, g, g², g³, …} = ⟨g⟩.</p>
+  <p>g is called a <strong>generator</strong>. Every cyclic group is Abelian.</p>
+  <p>ℤₙ under addition is always cyclic with generator 1 (or any element coprime to n).</p>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Example – Orders in ℤ₆</div>
+  <table>
+    <tr><th>Element</th><th>Successive multiples (mod 6)</th><th>Order</th></tr>
+    <tr><td>0</td><td>0</td><td>1</td></tr>
+    <tr><td>1</td><td>1,2,3,4,5,<strong>0</strong></td><td>6 ← generator</td></tr>
+    <tr><td>2</td><td>2,4,<strong>0</strong></td><td>3</td></tr>
+    <tr><td>3</td><td>3,<strong>0</strong></td><td>2</td></tr>
+    <tr><td>4</td><td>4,2,<strong>0</strong></td><td>3</td></tr>
+    <tr><td>5</td><td>5,4,3,2,1,<strong>0</strong></td><td>6 ← generator</td></tr>
+  </table>
+  <p>ℤ₆ is cyclic: ℤ₆ = ⟨1⟩ = ⟨5⟩.</p>
+</div>
+
+<!-- 4.7 -->
+<h3 class="section-title" id="lagrange">4.7 Lagrange's Theorem and Corollaries</h3>
+
+<div class="thm block">
+  <div class="block-title">Lagrange's Theorem</div>
+  <p>If H is a subgroup of a finite group G, then <strong>|H| divides |G|</strong>.</p>
+  <p><strong>Proof idea:</strong> The left cosets {gH : g ∈ G} partition G into equal parts of size |H|. So |G| = (number of cosets) × |H|.</p>
+</div>
+
+<div class="thm block">
+  <div class="block-title">Important Corollaries</div>
+  <ul>
+    <li><strong>Corollary 1:</strong> ord(g) divides |G| for any g ∈ G.</li>
+    <li><strong>Corollary 2:</strong> g^|G| = e for any g ∈ G.</li>
+    <li><strong>Corollary 3:</strong> Any group of prime order p is cyclic (isomorphic to ℤₚ).</li>
+    <li><strong>Fermat's Little Theorem:</strong> If p is prime and p ∤ a, then a^(p−1) ≡ 1 (mod p).</li>
+    <li><strong>Euler's Theorem:</strong> If gcd(a,n)=1, then a^φ(n) ≡ 1 (mod n).</li>
+  </ul>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Lagrange's Theorem</div>
+
+  <details>
+    <summary>Q1. In ℤ₇*, what are the possible orders of elements?</summary>
+    <div class="solution-body">
+      <p>|ℤ₇*| = φ(7) = 6. By Lagrange, element orders must divide 6.</p>
+      <p>Divisors of 6: 1, 2, 3, 6.</p>
+      <p><strong>Possible orders: 1, 2, 3, or 6.</strong></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Compute 2^100 mod 7 using Fermat's Little Theorem.</summary>
+    <div class="solution-body">
+      <p>p = 7 (prime), 7 ∤ 2. By Fermat: 2^6 ≡ 1 (mod 7).</p>
+      <p>100 = 6×16 + 4, so 2^100 = (2^6)^16 × 2^4 ≡ 1^16 × 16 ≡ 16 mod 7 ≡ 2 (mod 7).</p>
+      <p><strong>Answer: 2^100 ≡ 2 (mod 7).</strong></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3. Prove: the order of every element of S₃ divides 6.</summary>
+    <div class="solution-body">
+      <p>|S₃| = 3! = 6. By Lagrange, the order of ⟨g⟩ (a cyclic subgroup) must divide |S₃| = 6.</p>
+      <p>Since ord(g) = |⟨g⟩|, it follows that ord(g) | 6 for every g ∈ S₃. ✓</p>
+    </div>
+  </details>
+</div>
+
+<!-- 4.8–4.9 -->
+<h3 class="section-title" id="rings">4.8–4.9 Rings and Polynomial Rings</h3>
+
+<div class="def block">
+  <div class="block-title">Definition – Ring (R, +, ×)</div>
+  <p>A <strong>ring</strong> is a set R with two operations satisfying:</p>
+  <ul>
+    <li>(R, +) is an Abelian group.</li>
+    <li>(R, ×) is a monoid (closed, associative, has identity 1).</li>
+    <li>Distributivity: a×(b+c) = a×b + a×c and (b+c)×a = b×a + c×a.</li>
+  </ul>
+  <p><strong>Commutative ring:</strong> Also has a×b = b×a. Examples: ℤ, ℤₙ, ℝ[x].</p>
+  <p><strong>Not commutative:</strong> Matrix ring Mₙ(ℝ) for n ≥ 2.</p>
+</div>
+
+<div class="def block">
+  <div class="block-title">Polynomial Ring R[x]</div>
+  <p>R[x] = {a₀ + a₁x + a₂x² + ⋯ + aₙxⁿ : aᵢ ∈ R} with standard polynomial addition and multiplication.</p>
+  <p><strong>GF(2)[x]</strong> = polynomials with binary coefficients, used in cryptography and error-correcting codes.</p>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Example – Polynomial Arithmetic in ℤ₂[x]</div>
+  <p>All coefficients are mod 2 (so 2 ≡ 0, 3 ≡ 1).</p>
+  <p>(x² + x + 1) + (x + 1) = x² + 2x + 2 = x² (since 2≡0 mod 2)</p>
+  <p>(x + 1)² = x² + 2x + 1 = x² + 1 (since 2x ≡ 0)</p>
+</div>
+
+<!-- 4.10–4.11 -->
+<h3 class="section-title" id="fields">4.10–4.11 Fields and Primitive Elements</h3>
+
+<div class="def block">
+  <div class="block-title">Definition – Field</div>
+  <p>A <strong>field</strong> is a commutative ring where every nonzero element has a multiplicative inverse.</p>
+  <p>Equivalently: (F, +) and (F\{0}, ×) are both Abelian groups, with distributivity.</p>
+  <p>Examples: ℚ, ℝ, ℂ, ℤₚ (p prime), GF(pⁿ) (Galois/Finite Fields).</p>
+  <p>Note: ℤ is NOT a field (2 has no multiplicative inverse in ℤ).</p>
+</div>
+
+<div class="def block">
+  <div class="block-title">Primitive Element of GF(q)</div>
+  <p>The multiplicative group GF(q)* = GF(q)\{0} is cyclic of order q−1.</p>
+  <p>A <strong>primitive element</strong> (primitive root) g is a generator: {g¹, g², …, g^(q−1)} = GF(q)*.</p>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Example – Primitive Root mod 7</div>
+  <p>Is g=3 a primitive root mod 7? ℤ₇* has order 6.</p>
+  <p>3¹=3, 3²=2, 3³=6, 3⁴=4, 3⁵=5, 3⁶=1 (mod 7)</p>
+  <p>All 6 nonzero elements of ℤ₇ appear → yes, 3 is a primitive root mod 7! ✓</p>
+</div>
+
+<!-- 4.12 -->
+<h3 class="section-title" id="crypto">4.12 Cryptography: DLP and Diffie-Hellman Key Exchange</h3>
+
+<div class="def block">
+  <div class="block-title">Discrete Logarithm Problem (DLP)</div>
+  <p><strong>Problem:</strong> Given a prime p, generator g of ℤₚ*, and y = g^x mod p, find x.</p>
+  <p><strong>Forward direction:</strong> Computing g^x mod p is easy (O(log x) via fast exponentiation).</p>
+  <p><strong>Reverse direction:</strong> Given y, finding x is believed to be computationally hard for large p (no polynomial-time algorithm known). This asymmetry is the security basis.</p>
+</div>
+
+<div class="thm block">
+  <div class="block-title">Diffie-Hellman Key Exchange Protocol</div>
+  <p><strong>Public parameters:</strong> prime p, generator g of ℤₚ*.</p>
+  <ol class="steps">
+    <li>Alice picks secret a, computes A = g^a mod p, sends A to Bob publicly.</li>
+    <li>Bob picks secret b, computes B = g^b mod p, sends B to Alice publicly.</li>
+    <li>Alice computes: K = B^a mod p = g^(ab) mod p.</li>
+    <li>Bob computes: K = A^b mod p = g^(ab) mod p.</li>
+    <li>Both share the secret K = g^(ab) mod p without ever transmitting a or b!</li>
+  </ol>
+  <p><strong>Security:</strong> An eavesdropper sees g, p, A=g^a, B=g^b but must solve DLP to find K.</p>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Worked Example – Diffie-Hellman</div>
+  <p>p = 23, g = 5</p>
+  <p>Alice: a = 6 → A = 5⁶ mod 23 = 15625 mod 23 = <strong>8</strong></p>
+  <p>Bob: b = 15 → B = 5^15 mod 23 = <strong>19</strong></p>
+  <p>Alice: K = 19^6 mod 23 = <strong>2</strong></p>
+  <p>Bob: K = 8^15 mod 23 = <strong>2</strong></p>
+  <p>Shared secret: K = 2 ✓</p>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Cryptography</div>
+  <details>
+    <summary>Q1. Why can't an eavesdropper compute the shared key in Diffie-Hellman?</summary>
+    <div class="solution-body">
+      <p>The eavesdropper sees: p, g, A = g^a mod p, B = g^b mod p.</p>
+      <p>To compute K = g^(ab) mod p, they need either a or b.</p>
+      <p>Finding a from A = g^a mod p is exactly the Discrete Logarithm Problem, which has no known efficient (polynomial-time) classical algorithm for large p.</p>
+      <p><strong>Note:</strong> Shor's quantum algorithm CAN solve DLP efficiently, which is why post-quantum cryptography (lattice-based, hash-based) is being standardized by NIST.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Compute 3^(p-1) mod p for p=11 using Fermat's Little Theorem.</summary>
+    <div class="solution-body">
+      <p>By Fermat's Little Theorem: a^(p-1) ≡ 1 (mod p) for prime p and gcd(a,p)=1.</p>
+      <p>gcd(3,11)=1 and 11 is prime.</p>
+      <p>3^(11-1) = 3^10 ≡ 1 (mod 11).</p>
+      <p><strong>Answer: 1.</strong> (No computation needed — FLT gives it directly.)</p>
+    </div>
+  </details>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     UNIT 5 – ADVANCED COUNTING
+═══════════════════════════════════════════════ -->
+<h2 class="unit-title" id="unit5">Unit 5 – Advanced Counting</h2>
+<p class="unit-subtitle">Analyzing algorithms and combinatorics using recurrences and generating functions.</p>
+
+<!-- 5.1 -->
+<h3 class="section-title" id="recur-recur">5.1 Recurrence Relations of Recursive Algorithms</h3>
+
+<div class="def block">
+  <div class="block-title">What is a Recurrence Relation?</div>
+  <p>A <strong>recurrence relation</strong> defines a function T(n) in terms of its values at smaller inputs. Combined with base cases, it uniquely determines the function.</p>
+  <p>Used to express time complexity of recursive algorithms.</p>
+</div>
+
+<h4>Method 1: Iteration (Unrolling)</h4>
+<div class="ex block">
+  <div class="block-title">Example – Linear Recursion T(n) = T(n−1) + 1</div>
+  <p>T(1) = 1, T(n) = T(n−1) + 1</p>
+  <ol class="steps">
+    <li>T(n) = T(n−1) + 1</li>
+    <li>= T(n−2) + 2</li>
+    <li>= T(n−k) + k</li>
+    <li>At k = n−1: T(1) + (n−1) = 1 + n − 1 = n</li>
+  </ol>
+  <p><strong>T(n) = n = O(n)</strong></p>
+</div>
+
+<h4>Method 2: Characteristic Equation (for linear recurrences)</h4>
+<div class="ex block">
+  <div class="block-title">Fibonacci: F(n) = F(n−1) + F(n−2), F(0)=0, F(1)=1</div>
+  <ol class="steps">
+    <li>Assume F(n) = xⁿ. Substitute: xⁿ = xⁿ⁻¹ + xⁿ⁻². Divide by xⁿ⁻²: x² = x + 1.</li>
+    <li>Characteristic equation: x² − x − 1 = 0.</li>
+    <li>Roots: \(\varphi = \frac{1+\sqrt{5}}{2} \approx 1.618\) and \(\hat\varphi = \frac{1-\sqrt{5}}{2} \approx -0.618\)</li>
+    <li>General solution: \(F(n) = A\varphi^n + B\hat\varphi^n\)</li>
+    <li>Use F(0)=0, F(1)=1 to find A=1/√5, B=−1/√5.</li>
+    <li>Binet's Formula: \(F(n) = \dfrac{\varphi^n - \hat\varphi^n}{\sqrt{5}}\)</li>
+  </ol>
+  <p>Growth: F(n) = Θ(φⁿ) — exponential!</p>
+</div>
+
+<!-- 5.2 -->
+<h3 class="section-title" id="recur-dc">5.2 Recurrence Relations of Divide &amp; Conquer Algorithms</h3>
+
+<p>A D&amp;C algorithm solves a problem of size n by dividing it into <strong>a subproblems</strong> of size <strong>n/b</strong>, then spending <strong>f(n)</strong> work to combine solutions.</p>
+
+<div class="formula">T(n) = a · T(n/b) + f(n)</div>
+
+<table>
+  <tr><th>Algorithm</th><th>Recurrence</th><th>a</th><th>b</th><th>f(n)</th><th>Solution</th></tr>
+  <tr><td>Binary Search</td><td>T(n/2) + O(1)</td><td>1</td><td>2</td><td>O(1)</td><td>O(log n)</td></tr>
+  <tr><td>Merge Sort</td><td>2T(n/2) + O(n)</td><td>2</td><td>2</td><td>O(n)</td><td>O(n log n)</td></tr>
+  <tr><td>Strassen (Matrix)</td><td>7T(n/2) + O(n²)</td><td>7</td><td>2</td><td>O(n²)</td><td>O(n^2.81)</td></tr>
+</table>
+
+<!-- 5.3 -->
+<h3 class="section-title" id="master">5.3 Master Theorem and Growth of Functions</h3>
+
+<div class="thm block">
+  <div class="block-title">Master Theorem</div>
+  <p>For T(n) = a·T(n/b) + f(n) with a ≥ 1, b &gt; 1:</p>
+  <p>Define the <strong>critical exponent</strong>: \(c^* = \log_b a\)</p>
+  <table>
+    <tr><th>Case</th><th>Condition on f(n)</th><th>Conclusion</th></tr>
+    <tr><td><strong>Case 1</strong></td><td>f(n) = O(n^(c*−ε)) for ε&gt;0 &nbsp;[f grows slower than n^c*]</td><td>T(n) = Θ(n^c*)</td></tr>
+    <tr><td><strong>Case 2</strong></td><td>f(n) = Θ(n^c* · log^k n) for k≥0 &nbsp;[same order]</td><td>T(n) = Θ(n^c* · log^(k+1) n)</td></tr>
+    <tr><td><strong>Case 3</strong></td><td>f(n) = Ω(n^(c*+ε)) and af(n/b) ≤ cf(n) &nbsp;[f grows faster]</td><td>T(n) = Θ(f(n))</td></tr>
+  </table>
+  <p><strong>Intuition:</strong> Case 1: recursion dominates. Case 2: balanced, extra log. Case 3: work at top level dominates.</p>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Applying Master Theorem – Step by Step</div>
+  <p><strong>Merge Sort: T(n) = 2T(n/2) + n</strong><br>
+  a=2, b=2 → c* = log₂2 = 1. f(n)=n=Θ(n¹)=Θ(n^c*). Case 2, k=0 → <strong>T(n)=Θ(n log n)</strong></p>
+
+  <p><strong>Binary Search: T(n) = T(n/2) + 1</strong><br>
+  a=1, b=2 → c* = log₂1 = 0. f(n)=1=Θ(1)=Θ(n⁰). Case 2, k=0 → <strong>T(n)=Θ(log n)</strong></p>
+
+  <p><strong>T(n) = 4T(n/2) + n</strong><br>
+  a=4, b=2 → c* = log₂4 = 2. f(n)=n=O(n^(2−1))=O(n¹). Case 1 → <strong>T(n)=Θ(n²)</strong></p>
+</div>
+
+<h4>Asymptotic Notation Reference</h4>
+<table>
+  <tr><th>Notation</th><th>Meaning</th><th>Formal Definition</th></tr>
+  <tr><td>f = O(g)</td><td>f ≤ g asymptotically</td><td>∃c,n₀: f(n) ≤ c·g(n) ∀n≥n₀</td></tr>
+  <tr><td>f = Ω(g)</td><td>f ≥ g asymptotically</td><td>∃c,n₀: f(n) ≥ c·g(n) ∀n≥n₀</td></tr>
+  <tr><td>f = Θ(g)</td><td>f and g same rate</td><td>f=O(g) AND f=Ω(g)</td></tr>
+  <tr><td>f = o(g)</td><td>f strictly slower</td><td>lim f(n)/g(n) = 0 as n→∞</td></tr>
+</table>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Master Theorem</div>
+
+  <details>
+    <summary>Q1. Solve T(n) = 3T(n/3) + n.</summary>
+    <div class="solution-body">
+      <p>a=3, b=3 → c* = log₃3 = 1. f(n)=n = Θ(n¹) = Θ(n^c*).</p>
+      <p>Case 2 with k=0: <strong>T(n) = Θ(n log n).</strong></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Solve T(n) = 9T(n/3) + n.</summary>
+    <div class="solution-body">
+      <p>a=9, b=3 → c* = log₃9 = 2. f(n)=n = O(n^(2−1)) = O(n^1).</p>
+      <p>f grows strictly slower than n^c*=n²: Case 1.</p>
+      <p><strong>T(n) = Θ(n²).</strong></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3. Solve T(n) = 2T(n/2) + n log n.</summary>
+    <div class="solution-body">
+      <p>a=2, b=2 → c* = 1. f(n) = n log n = Θ(n¹ · log¹n) = Θ(n^c* · log¹n).</p>
+      <p>Case 2 with k=1: <strong>T(n) = Θ(n log² n).</strong></p>
+    </div>
+  </details>
+</div>
+
+<!-- 5.4 -->
+<h3 class="section-title" id="gen-func">5.4 Generating Functions</h3>
+
+<div class="def block">
+  <div class="block-title">Ordinary Generating Function (OGF)</div>
+  <p>The OGF of sequence a₀, a₁, a₂, … is the formal power series:</p>
+  <p>\[ A(x) = \sum_{n=0}^{\infty} a_n x^n = a_0 + a_1 x + a_2 x^2 + \cdots \]</p>
+  <p><strong>Key idea:</strong> The sequence IS the generating function — encoded as coefficients. We treat this as a formal algebraic object and use algebra to extract information.</p>
+  <p><em>Reading off:</em> aₙ = [xⁿ] A(x) (the coefficient of xⁿ in A(x)).</p>
+</div>
+
+<h4>Standard Generating Functions</h4>
+<table>
+  <tr><th>Sequence aₙ</th><th>Generating Function A(x)</th></tr>
+  <tr><td>1, 1, 1, 1, 1, …</td><td>\(\dfrac{1}{1-x}\)</td></tr>
+  <tr><td>1, r, r², r³, …</td><td>\(\dfrac{1}{1-rx}\)</td></tr>
+  <tr><td>\(\binom{n+k}{k}\) (fixed k)</td><td>\(\dfrac{1}{(1-x)^{k+1}}\)</td></tr>
+  <tr><td>Fibonacci: 0,1,1,2,3,5,…</td><td>\(\dfrac{x}{1-x-x^2}\)</td></tr>
+  <tr><td>n = 0,1,2,3,…</td><td>\(\dfrac{x}{(1-x)^2}\)</td></tr>
+</table>
+
+<h4>Operations on Generating Functions</h4>
+<table>
+  <tr><th>Operation</th><th>Effect on Sequence</th></tr>
+  <tr><td>A(x) + B(x)</td><td>aₙ + bₙ (pointwise sum)</td></tr>
+  <tr><td>x · A(x)</td><td>Shift right: 0, a₀, a₁, a₂, … </td></tr>
+  <tr><td>A(x) · B(x)</td><td>Convolution: cₙ = Σᵢ aᵢ · bₙ₋ᵢ</td></tr>
+  <tr><td>A'(x)</td><td>n · aₙ (multiply each term by its index)</td></tr>
+  <tr><td>∫A(x)dx</td><td>aₙ/(n+1) (divide by index+1)</td></tr>
+</table>
+
+<!-- 5.5 -->
+<h3 class="section-title" id="gf-count">5.5 Applications of Generating Functions in Counting</h3>
+
+<div class="ex block">
+  <div class="block-title">Example 1 – Stars and Bars via GF</div>
+  <p><strong>Problem:</strong> Number of ways to distribute n identical items into k distinct bins (each bin ≥ 0).</p>
+  <p>GF for one bin (can hold 0,1,2,… items): \(\sum_{j=0}^{\infty} x^j = \dfrac{1}{1-x}\)</p>
+  <p>GF for k bins: \(\left(\dfrac{1}{1-x}\right)^k = \dfrac{1}{(1-x)^k}\)</p>
+  <p>Answer = [xⁿ] \(\dfrac{1}{(1-x)^k} = \dbinom{n+k-1}{k-1}\) ← Stars and Bars!</p>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Example 2 – Coin Change Counting</div>
+  <p><strong>Problem:</strong> Ways to make n cents using 1¢, 2¢, 5¢ coins (unlimited supply).</p>
+  <p>GF for each coin type: 1/(1−x^denomination)</p>
+  <p>Combined GF: \(\dfrac{1}{(1-x)(1-x^2)(1-x^5)}\)</p>
+  <p>Coefficient of xⁿ = number of ways to make n cents.</p>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Example 3 – Bounded Bins</div>
+  <p><strong>Problem:</strong> Distribute n identical items into 3 bins, each holding 0 to 4 items.</p>
+  <p>GF for one bin: 1 + x + x² + x³ + x⁴ = \(\dfrac{1-x^5}{1-x}\)</p>
+  <p>Combined: \(\left(\dfrac{1-x^5}{1-x}\right)^3 = \dfrac{(1-x^5)^3}{(1-x)^3}\)</p>
+  <p>Expand and extract coefficient of xⁿ.</p>
+</div>
+
+<!-- 5.6 -->
+<h3 class="section-title" id="gf-recur">5.6 Applying Generating Functions to Solve Recurrences</h3>
+
+<div class="def block">
+  <div class="block-title">Standard Method</div>
+  <ol>
+    <li>Define A(x) = Σ aₙxⁿ.</li>
+    <li>Multiply the recurrence by xⁿ and sum over valid n values.</li>
+    <li>Rewrite in terms of A(x) using shifting: Σ aₙ₋₁xⁿ = xA(x), etc.</li>
+    <li>Solve the resulting algebraic equation for A(x) as a rational function.</li>
+    <li>Use partial fractions to decompose A(x), then read off coefficients.</li>
+  </ol>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Full Example – Fibonacci via GF (Binet's Formula Derivation)</div>
+  <p>F(n) = F(n−1) + F(n−2), F(0)=0, F(1)=1.</p>
+  <ol class="steps">
+    <li>Let F(x) = Σ F(n)xⁿ.</li>
+    <li>Sum recurrence for n≥2: \(\sum_{n\geq 2}F(n)x^n = \sum_{n\geq 2}F(n-1)x^n + \sum_{n\geq 2}F(n-2)x^n\)</li>
+    <li>LHS = F(x) − F(0) − F(1)x = F(x) − x</li>
+    <li>RHS = x·(F(x)−F(0)) + x²·F(x) = xF(x) + x²F(x)</li>
+    <li>F(x) − x = xF(x) + x²F(x)</li>
+    <li>F(x)(1 − x − x²) = x</li>
+    <li>\(\boxed{F(x) = \dfrac{x}{1-x-x^2}}\)</li>
+    <li>Factor: 1−x−x² = −(x − 1/φ)(x − 1/ψ)... use partial fractions to get \(F(n) = \dfrac{\varphi^n - \hat\varphi^n}{\sqrt{5}}\) ✓</li>
+  </ol>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Generating Functions</div>
+
+  <details>
+    <summary>Q1. Find the coefficient of x⁵ in 1/(1−x)³.</summary>
+    <div class="solution-body">
+      <p>\(\dfrac{1}{(1-x)^3} = \sum_{n=0}^{\infty} \dbinom{n+2}{2} x^n\)</p>
+      <p>For n=5: \(\dbinom{7}{2} = 21.\)</p>
+      <p><strong>Answer: 21.</strong></p>
+      <p>Combinatorial meaning: ways to distribute 5 identical items into 3 distinct bins = C(7,2) = 21.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Solve aₙ = 2aₙ₋₁, a₀ = 1 using generating functions.</summary>
+    <div class="solution-body">
+      <p>Let A(x) = Σ aₙxⁿ.</p>
+      <p>A(x) − a₀ = 2x·A(x) → A(x) − 1 = 2xA(x)</p>
+      <p>A(x)(1−2x) = 1 → A(x) = 1/(1−2x) = Σ 2ⁿxⁿ</p>
+      <p><strong>Answer: aₙ = 2ⁿ.</strong></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3. How many ways to distribute 10 identical candies to 4 children so each gets at least 1?</summary>
+    <div class="solution-body">
+      <p>Substitution: let yᵢ = xᵢ − 1 ≥ 0. Then y₁+y₂+y₃+y₄ = 10 − 4 = 6.</p>
+      <p>GF = 1/(1−x)⁴. Answer = [x⁶] 1/(1−x)⁴ = C(6+3,3) = C(9,3) = 84.</p>
+      <p><strong>Answer: 84 ways.</strong></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q4. Solve aₙ − 5aₙ₋₁ + 6aₙ₋₂ = 0, a₀=0, a₁=1 using GFs.</summary>
+    <div class="solution-body">
+      <p>Let A(x) = Σ aₙxⁿ. Multiply recurrence by xⁿ, sum for n≥2:</p>
+      <p>A(x) − x − 5x·A(x) + 6x²·A(x) = 0</p>
+      <p>A(x)(1 − 5x + 6x²) = x</p>
+      <p>A(x) = x / (1−5x+6x²) = x / ((1−2x)(1−3x))</p>
+      <p>Partial fractions: x/((1−2x)(1−3x)) = A/(1−2x) + B/(1−3x)</p>
+      <p>Set x=1/2: 1/2 = A(1/2) → A=−1. Set x=1/3: 1/3 = B(1/3) → B=1.</p>
+      <p>A(x) = −1/(1−2x) + 1/(1−3x) = Σ (−2ⁿ + 3ⁿ)xⁿ</p>
+      <p><strong>Answer: aₙ = 3ⁿ − 2ⁿ.</strong> Verify: a₀=1−1=0 ✓, a₁=3−2=1 ✓.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q5. Find the GF for the number of ways to partition n into at most 3 parts, each part ≤ 4.</summary>
+    <div class="solution-body">
+      <p>Each part is between 0 and 4, and we have 3 parts (order matters here; if order doesn't matter it's harder).</p>
+      <p>Treating parts as ordered (compositions): GF for one part = 1 + x + x² + x³ + x⁴ = (1−x⁵)/(1−x).</p>
+      <p>GF for 3 ordered parts: \(\left(\frac{1-x^5}{1-x}\right)^3\).</p>
+      <p>Coefficient of xⁿ in this product gives the count. For example, [x⁵] = number of ways = 18 (can verify by enumeration).</p>
+    </div>
+  </details>
+</div>
+
+<!-- Footer -->
+<div style="margin-top:60px; padding:24px; border-top:2px solid #e2e8f0; color:var(--muted); font-size:0.85rem; text-align:center; background:#f1f5f9; border-radius: 0 0 var(--radius) var(--radius);">
+  Discrete Mathematics Study Notes &nbsp;&bull;&nbsp; Units 1–5 &nbsp;&bull;&nbsp; Logic &bull; Proofs &bull; Set Theory &bull; Abstract Algebra &bull; Advanced Counting
+</div>
+
+</div><!-- #main -->
+
+<button id="totop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('totop').style.display = window.scrollY > 400 ? 'block' : 'none';
+  });
+
+  const links = document.querySelectorAll('#sidebar a');
+  const sections = [...links].map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) current = '#' + sec.id;
+    });
+    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === current));
+  }, { passive: true });
+</script>
+</body>
+</html>
