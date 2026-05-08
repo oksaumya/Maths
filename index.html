@@ -127,8 +127,12 @@
   <div class="unit-label">Unit 1 – Logic</div>
   <ul>
     <li><a href="#prop-logic">1.1 Propositional Logic</a></li>
+    <li><a href="#cond-equiv">&nbsp;&nbsp;↳ Conditional Equivalences</a></li>
+    <li><a href="#satisfiability">&nbsp;&nbsp;↳ Satisfiability &amp; Sudoku</a></li>
     <li><a href="#pred-logic">1.2 Predicate Logic &amp; Quantifiers</a></li>
     <li><a href="#bool-algebra">1.3 Boolean Algebra</a></li>
+    <li><a href="#bool-func">&nbsp;&nbsp;↳ Boolean Func, DNF, CNF</a></li>
+    <li><a href="#kmap">&nbsp;&nbsp;↳ Karnaugh Map (K-map)</a></li>
   </ul>
 
   <div class="unit-label">Unit 2 – Proofs</div>
@@ -235,6 +239,293 @@
   <tr><td>Absorption</td><td>p ∨ (p ∧ q) ≡ p</td></tr>
   <tr><td>Distributive</td><td>p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r)</td></tr>
 </table>
+
+<!-- CONDITIONAL EQUIVALENCES -->
+<h3 class="section-title" id="cond-equiv">1.1a Logical Equivalences of Conditional &amp; Biconditional Statements</h3>
+
+<h4>Equivalences of p → q (Conditional / Implication)</h4>
+<p>The conditional p → q has several important equivalent and non-equivalent forms. Knowing which are equivalent and which are not is a key B.Tech exam skill.</p>
+
+<div class="thm block">
+  <div class="block-title">All Key Equivalences for p → q</div>
+  <table>
+    <tr><th>Form</th><th>Expression</th><th>Equivalent to p→q?</th><th>Explanation</th></tr>
+    <tr><td>Original</td><td>p → q</td><td>—</td><td>Base implication</td></tr>
+    <tr><td>Contrapositive</td><td>¬q → ¬p</td><td><strong>YES ✓</strong></td><td>Flip and negate both — always equivalent</td></tr>
+    <tr><td>Converse</td><td>q → p</td><td><strong>NO ✗</strong></td><td>Just flip — NOT equivalent</td></tr>
+    <tr><td>Inverse</td><td>¬p → ¬q</td><td><strong>NO ✗</strong></td><td>Just negate both — NOT equivalent (≡ converse)</td></tr>
+    <tr><td>OR form</td><td>¬p ∨ q</td><td><strong>YES ✓</strong></td><td>Standard rewrite</td></tr>
+    <tr><td>NAND form</td><td>¬(p ∧ ¬q)</td><td><strong>YES ✓</strong></td><td>Negation of "p and not q"</td></tr>
+    <tr><td>Exportation</td><td>(p ∧ q) → r ≡ p → (q → r)</td><td><strong>YES ✓</strong></td><td>Used in proofs to "export" a premise</td></tr>
+  </table>
+</div>
+
+<div class="warn block">
+  <div class="block-title">B.Tech Exam Tip</div>
+  <p><strong>Equivalence pairs to memorise:</strong></p>
+  <ul>
+    <li>p→q ≡ Contrapositive (¬q→¬p) — always safe to swap</li>
+    <li>Converse ≡ Inverse — but both are NOT equal to the original</li>
+    <li>p→q ≡ ¬p∨q — most useful algebraic rewrite</li>
+    <li>p→q ≡ ¬(p∧¬q) — useful in CNF/circuit design</li>
+  </ul>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Truth Table — Comparing All Four Forms</div>
+  <table>
+    <tr><th>p</th><th>q</th><th>p→q (original)</th><th>q→p (converse)</th><th>¬p→¬q (inverse)</th><th>¬q→¬p (contrapositive)</th></tr>
+    <tr><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+    <tr><td>T</td><td>F</td><td><strong>F</strong></td><td>T</td><td>T</td><td><strong>F</strong></td></tr>
+    <tr><td>F</td><td>T</td><td>T</td><td><strong>F</strong></td><td><strong>F</strong></td><td>T</td></tr>
+    <tr><td>F</td><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+  </table>
+  <p>Columns 3 and 6 are identical → p→q ≡ contrapositive ✓<br>
+  Columns 4 and 5 are identical → converse ≡ inverse ✓ (but both differ from column 3)</p>
+</div>
+
+<h4>Equivalences of p ↔ q (Biconditional)</h4>
+<p>The biconditional p ↔ q ("p if and only if q") is true exactly when p and q have the same truth value. It has several useful equivalent forms.</p>
+
+<div class="thm block">
+  <div class="block-title">Key Equivalences for p ↔ q</div>
+  <table>
+    <tr><th>Equivalent Form</th><th>Expression</th><th>Why</th></tr>
+    <tr><td>Both-implications</td><td>(p→q) ∧ (q→p)</td><td>Definition: "if and only if" = both directions hold</td></tr>
+    <tr><td>Same-value cases</td><td>(p∧q) ∨ (¬p∧¬q)</td><td>True when both T or both F</td></tr>
+    <tr><td>Double OR form</td><td>(¬p∨q) ∧ (¬q∨p)</td><td>Expand each implication as ¬p∨q</td></tr>
+    <tr><td>Negated complement</td><td>¬p ↔ ¬q</td><td>Negating both sides preserves biconditional</td></tr>
+    <tr><td>Negation (XOR)</td><td>¬(p↔q) ≡ p⊕q</td><td>True when p and q differ — exclusive OR</td></tr>
+  </table>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Truth Table Verification — p↔q ≡ (p∧q)∨(¬p∧¬q)</div>
+  <table>
+    <tr><th>p</th><th>q</th><th>p↔q</th><th>p∧q</th><th>¬p∧¬q</th><th>(p∧q)∨(¬p∧¬q)</th></tr>
+    <tr><td>T</td><td>T</td><td>T</td><td>T</td><td>F</td><td>T</td></tr>
+    <tr><td>T</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr>
+    <tr><td>F</td><td>T</td><td>F</td><td>F</td><td>F</td><td>F</td></tr>
+    <tr><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td>T</td></tr>
+  </table>
+  <p>Columns 3 and 6 match ✓</p>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Conditional &amp; Biconditional Equivalences</div>
+
+  <details>
+    <summary>Q1. For the statement "If you study hard, you will pass", write the (a) converse (b) inverse (c) contrapositive. Which are equivalent?</summary>
+    <div class="solution-body">
+      <p>Let p = "you study hard", q = "you will pass".</p>
+      <p>(a) <strong>Converse:</strong> q→p = "If you pass, you studied hard." (NOT equivalent)</p>
+      <p>(b) <strong>Inverse:</strong> ¬p→¬q = "If you do not study hard, you will not pass." (NOT equivalent; ≡ converse)</p>
+      <p>(c) <strong>Contrapositive:</strong> ¬q→¬p = "If you do not pass, you did not study hard." (<strong>EQUIVALENT</strong> to original)</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Show that p↔q ≡ (p→q) ∧ (q→p) using a truth table.</summary>
+    <div class="solution-body">
+      <table>
+        <tr><th>p</th><th>q</th><th>p↔q</th><th>p→q</th><th>q→p</th><th>(p→q)∧(q→p)</th></tr>
+        <tr><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+        <tr><td>T</td><td>F</td><td>F</td><td>F</td><td>T</td><td>F</td></tr>
+        <tr><td>F</td><td>T</td><td>F</td><td>T</td><td>F</td><td>F</td></tr>
+        <tr><td>F</td><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+      </table>
+      <p>Columns 3 and 6 are identical. ✓ Proved.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3. Is the converse of a true conditional always true? Give an example.</summary>
+    <div class="solution-body">
+      <p><strong>No.</strong> A true conditional does NOT guarantee a true converse.</p>
+      <p>Example: p→q = "If a number is divisible by 4, it is divisible by 2." TRUE.</p>
+      <p>Converse q→p = "If a number is divisible by 2, it is divisible by 4." FALSE (e.g., 6 is divisible by 2 but not 4).</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q4. Rewrite p→q using only ∧ and ¬ (no ∨ or →).</summary>
+    <div class="solution-body">
+      <p>p→q ≡ ¬p∨q &nbsp;[standard rewrite]</p>
+      <p>¬p∨q ≡ ¬(p∧¬q) &nbsp;[De Morgan's: ¬(A∧B) = ¬A∨¬B, reversed]</p>
+      <p><strong>Answer: p→q ≡ ¬(p ∧ ¬q)</strong></p>
+    </div>
+  </details>
+</div>
+
+<!-- SATISFIABILITY -->
+<h3 class="section-title" id="satisfiability">1.1b Satisfiability and the Sudoku Puzzle</h3>
+
+<h4>Satisfiability</h4>
+<div class="def block">
+  <div class="block-title">Definition – Satisfiability</div>
+  <p>A propositional formula φ is:</p>
+  <ul>
+    <li><strong>Satisfiable:</strong> There exists at least one truth assignment that makes φ = T. (Could be tautology or contingency.)</li>
+    <li><strong>Unsatisfiable (Contradiction):</strong> Every truth assignment makes φ = F. No satisfying assignment exists.</li>
+    <li><strong>Valid (Tautology):</strong> Every truth assignment makes φ = T. (A special case of satisfiable.)</li>
+  </ul>
+  <p><strong>Quick check:</strong> φ is unsatisfiable ↔ ¬φ is a tautology.</p>
+</div>
+
+<div class="thm block">
+  <div class="block-title">SAT Problem — NP-Complete</div>
+  <p>The <strong>Boolean Satisfiability Problem (SAT)</strong>: given a propositional formula in CNF, decide if it is satisfiable.</p>
+  <ul>
+    <li>First problem proved to be <strong>NP-complete</strong> (Cook-Levin Theorem, 1971).</li>
+    <li>No known polynomial-time algorithm. Best worst-case: exponential (2ⁿ assignments to check).</li>
+    <li>Practical SAT solvers (DPLL, CDCL) can handle millions of variables in real applications.</li>
+    <li>If you can solve SAT in polynomial time → P = NP (the most famous open problem in CS).</li>
+  </ul>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Examples – Classifying Formulas</div>
+  <table>
+    <tr><th>Formula</th><th>Satisfiable?</th><th>Tautology?</th><th>Reason</th></tr>
+    <tr><td>p ∨ ¬p</td><td>Yes</td><td>Yes</td><td>Always true (excluded middle)</td></tr>
+    <tr><td>p ∧ ¬p</td><td>No</td><td>No</td><td>Always false (contradiction)</td></tr>
+    <tr><td>p ∧ q</td><td>Yes (p=T,q=T)</td><td>No</td><td>True for one assignment only</td></tr>
+    <tr><td>(p→q) ∧ p ∧ ¬q</td><td>No</td><td>No</td><td>p,¬q makes p→q false; contradiction</td></tr>
+  </table>
+</div>
+
+<h4>Sudoku as a Satisfiability Problem</h4>
+
+<div class="ex block">
+  <div class="block-title">Sudoku Puzzle — Visual Diagram</div>
+  <p>A standard 9×9 Sudoku. Each row, column, and bold 3×3 box must contain digits 1–9 exactly once. Pre-filled cells are the <strong>given clues</strong>.</p>
+  <style>
+    .sudoku-wrap { display:flex; gap:32px; align-items:flex-start; flex-wrap:wrap; margin:12px 0; }
+    .sudoku-grid { border-collapse:collapse; }
+    .sudoku-grid td {
+      width:36px; height:36px; text-align:center; vertical-align:middle;
+      font-size:1.05rem; font-weight:600; border:1px solid #94a3b8;
+      background:#fff; color:#1e3a8a;
+    }
+    .sudoku-grid td.given { background:#dbeafe; color:#1e3a8a; }
+    .sudoku-grid td.empty { color:#64748b; font-size:0.7rem; }
+    /* thick borders for 3×3 boxes */
+    .sudoku-grid td:nth-child(3n) { border-right:3px solid #1e3a8a; }
+    .sudoku-grid tr:nth-child(3n) td { border-bottom:3px solid #1e3a8a; }
+    .sudoku-grid { border:3px solid #1e3a8a; }
+    .sat-legend { font-size:0.85rem; color:#374151; max-width:300px; }
+    .sat-legend p { margin-bottom:8px; }
+    .sat-legend code { background:#e8ecf5; padding:1px 4px; border-radius:3px; }
+  </style>
+  <div class="sudoku-wrap">
+    <table class="sudoku-grid">
+      <tr>
+        <td class="given">5</td><td class="given">3</td><td class="empty">·</td>
+        <td class="empty">·</td><td class="given">7</td><td class="empty">·</td>
+        <td class="empty">·</td><td class="empty">·</td><td class="empty">·</td>
+      </tr>
+      <tr>
+        <td class="given">6</td><td class="empty">·</td><td class="empty">·</td>
+        <td class="given">1</td><td class="given">9</td><td class="given">5</td>
+        <td class="empty">·</td><td class="empty">·</td><td class="empty">·</td>
+      </tr>
+      <tr>
+        <td class="empty">·</td><td class="given">9</td><td class="given">8</td>
+        <td class="empty">·</td><td class="empty">·</td><td class="empty">·</td>
+        <td class="empty">·</td><td class="given">6</td><td class="empty">·</td>
+      </tr>
+      <tr>
+        <td class="given">8</td><td class="empty">·</td><td class="empty">·</td>
+        <td class="empty">·</td><td class="given">6</td><td class="empty">·</td>
+        <td class="empty">·</td><td class="empty">·</td><td class="given">3</td>
+      </tr>
+      <tr>
+        <td class="given">4</td><td class="empty">·</td><td class="empty">·</td>
+        <td class="given">8</td><td class="empty">·</td><td class="given">3</td>
+        <td class="empty">·</td><td class="empty">·</td><td class="given">1</td>
+      </tr>
+      <tr>
+        <td class="given">7</td><td class="empty">·</td><td class="empty">·</td>
+        <td class="empty">·</td><td class="given">2</td><td class="empty">·</td>
+        <td class="empty">·</td><td class="empty">·</td><td class="given">6</td>
+      </tr>
+      <tr>
+        <td class="empty">·</td><td class="given">6</td><td class="empty">·</td>
+        <td class="empty">·</td><td class="empty">·</td><td class="empty">·</td>
+        <td class="given">2</td><td class="given">8</td><td class="empty">·</td>
+      </tr>
+      <tr>
+        <td class="empty">·</td><td class="empty">·</td><td class="empty">·</td>
+        <td class="given">4</td><td class="given">1</td><td class="given">9</td>
+        <td class="empty">·</td><td class="empty">·</td><td class="given">5</td>
+      </tr>
+      <tr>
+        <td class="empty">·</td><td class="empty">·</td><td class="empty">·</td>
+        <td class="empty">·</td><td class="given">8</td><td class="empty">·</td>
+        <td class="empty">·</td><td class="given">7</td><td class="given">9</td>
+      </tr>
+    </table>
+    <div class="sat-legend">
+      <p><strong>SAT Encoding</strong></p>
+      <p>Each cell (i,j) and digit k is a Boolean variable:</p>
+      <p><code>p(i,j,k) = 1</code> if cell (i,j) holds digit k</p>
+      <p>Example: the blue cell at row 1, col 1 (value=5) gives the unit clause:<br>
+      <code>p(1,1,5) = TRUE</code></p>
+      <p><strong>Total:</strong> 9×9×9 = 729 variables</p>
+      <p><strong>Constraints as clauses:</strong><br>
+      At-least-one per cell, at-most-one per cell, row/col/box uniqueness = thousands of clauses</p>
+      <p>A SAT solver finds a satisfying assignment = the completed puzzle.</p>
+    </div>
+  </div>
+</div>
+
+<div class="def block">
+  <div class="block-title">Encoding Sudoku as SAT</div>
+  <p>Every Sudoku puzzle can be converted into a SAT problem and solved by a SAT solver. This shows how logic is applied in practice.</p>
+  <p><strong>Variables:</strong> p(i, j, k) = "cell in row i, column j contains digit k" &nbsp;(i,j,k ∈ {1,…,9})</p>
+  <p>Total variables: 9 × 9 × 9 = <strong>729 Boolean variables</strong></p>
+  <p><strong>Constraints (encoded as clauses):</strong></p>
+  <ul>
+    <li><strong>Each cell has at least one digit:</strong> p(i,j,1) ∨ p(i,j,2) ∨ … ∨ p(i,j,9) for all i,j</li>
+    <li><strong>Each cell has at most one digit:</strong> ¬p(i,j,k) ∨ ¬p(i,j,l) for all k≠l</li>
+    <li><strong>Each digit appears once per row:</strong> ¬p(i,j,k) ∨ ¬p(i,j',k) for all j≠j'</li>
+    <li><strong>Each digit appears once per column and box:</strong> similar clauses</li>
+    <li><strong>Given clues:</strong> directly set p(i,j,k) = T for the pre-filled cells</li>
+  </ul>
+  <p>A SAT solver (e.g., MiniSAT) finds a satisfying assignment → the solution to the puzzle, in milliseconds.</p>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – Satisfiability</div>
+
+  <details>
+    <summary>Q1. Is (p ∨ q) ∧ (¬p ∨ r) ∧ (¬q ∨ ¬r) satisfiable?</summary>
+    <div class="solution-body">
+      <p>Try p=T, q=F, r=T:</p>
+      <p>(T∨F) ∧ (F∨T) ∧ (T∨F) = T ∧ T ∧ T = T ✓</p>
+      <p><strong>Yes, satisfiable.</strong> Assignment: p=T, q=F, r=T satisfies all three clauses.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Is (p ∨ q) ∧ ¬p ∧ ¬q satisfiable?</summary>
+    <div class="solution-body">
+      <p>From ¬p and ¬q: p=F, q=F.</p>
+      <p>Then p∨q = F∨F = F. So (p∨q)∧¬p∧¬q = F.</p>
+      <p>No other assignments are possible since ¬p and ¬q force p=F, q=F.</p>
+      <p><strong>No, unsatisfiable (contradiction).</strong></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3. How many truth assignments satisfy p ↔ q when there are 2 variables?</summary>
+    <div class="solution-body">
+      <p>p↔q is true when p and q have the same value.</p>
+      <p>Satisfying assignments: (T,T) and (F,F) — exactly 2 out of 4.</p>
+      <p><strong>Answer: 2 satisfying assignments.</strong></p>
+    </div>
+  </details>
+</div>
 
 <div class="ex block">
   <div class="block-title">Worked Example – Show p→q ≡ ¬p∨q</div>
@@ -378,6 +669,7 @@
 </table>
 
 <h4>Logic Gates</h4>
+<p>Logic gates are the physical building blocks of digital circuits. Each gate implements a Boolean operation. Below are the standard IEEE symbols, truth tables, and key properties.</p>
 <table>
   <tr><th>Gate</th><th>Operation</th><th>Output 1 when …</th><th>Universal Gate?</th></tr>
   <tr><td>AND</td><td>A · B</td><td>All inputs are 1</td><td>No</td></tr>
@@ -387,6 +679,472 @@
   <tr><td>NOR</td><td>(A+B)'</td><td>All inputs are 0</td><td><strong>Yes</strong></td></tr>
   <tr><td>XOR</td><td>A ⊕ B</td><td>Exactly one input is 1</td><td>No</td></tr>
 </table>
+
+<div class="ex block">
+  <div class="block-title">Logic Gate Diagrams (Standard IEEE Symbols)</div>
+  <style>
+    .gates-grid { display:flex; flex-wrap:wrap; gap:20px; margin:12px 0; }
+    .gate-card {
+      background:#fff; border:1.5px solid #e2e8f0; border-radius:10px;
+      padding:14px 16px; min-width:180px; flex:1; max-width:220px;
+      box-shadow:0 1px 4px rgba(0,0,0,0.06);
+    }
+    .gate-card h5 { font-size:0.85rem; font-weight:700; color:#1e3a8a; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em; }
+    .gate-card svg { display:block; margin:0 auto 8px; }
+    .gate-card .gate-expr { text-align:center; font-size:0.88rem; color:#374151; font-family:'Fira Code',monospace; background:#f1f5f9; border-radius:5px; padding:3px 8px; }
+    .gate-tt { width:100%; border-collapse:collapse; font-size:0.78rem; margin-top:8px; }
+    .gate-tt th { background:#3b5bdb; color:#fff; padding:3px 6px; }
+    .gate-tt td { padding:3px 6px; border-bottom:1px solid #e2e8f0; text-align:center; }
+    .gate-tt tr:nth-child(even) td { background:#f1f5f9; }
+  </style>
+  <div class="gates-grid">
+
+    <!-- AND Gate -->
+    <div class="gate-card">
+      <h5>AND Gate</h5>
+      <svg width="120" height="70" viewBox="0 0 120 70">
+        <line x1="10" y1="20" x2="40" y2="20" stroke="#374151" stroke-width="2"/>
+        <line x1="10" y1="50" x2="40" y2="50" stroke="#374151" stroke-width="2"/>
+        <line x1="40" y1="10" x2="40" y2="60" stroke="#374151" stroke-width="2"/>
+        <line x1="40" y1="10" x2="70" y2="10" stroke="#374151" stroke-width="2"/>
+        <line x1="40" y1="60" x2="70" y2="60" stroke="#374151" stroke-width="2"/>
+        <path d="M70 10 A25 25 0 0 1 70 60" fill="none" stroke="#374151" stroke-width="2"/>
+        <line x1="95" y1="35" x2="115" y2="35" stroke="#374151" stroke-width="2"/>
+        <text x="5" y="24" font-size="11" fill="#3b5bdb" font-family="monospace">A</text>
+        <text x="5" y="54" font-size="11" fill="#3b5bdb" font-family="monospace">B</text>
+        <text x="108" y="31" font-size="11" fill="#15803d" font-family="monospace">Y</text>
+      </svg>
+      <div class="gate-expr">Y = A · B</div>
+      <table class="gate-tt">
+        <tr><th>A</th><th>B</th><th>Y</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td></tr>
+      </table>
+    </div>
+
+    <!-- OR Gate -->
+    <div class="gate-card">
+      <h5>OR Gate</h5>
+      <svg width="120" height="70" viewBox="0 0 120 70">
+        <line x1="10" y1="20" x2="38" y2="20" stroke="#374151" stroke-width="2"/>
+        <line x1="10" y1="50" x2="38" y2="50" stroke="#374151" stroke-width="2"/>
+        <path d="M35 10 Q50 35 35 60" fill="none" stroke="#374151" stroke-width="2"/>
+        <path d="M35 10 Q70 10 90 35" fill="none" stroke="#374151" stroke-width="2"/>
+        <path d="M35 60 Q70 60 90 35" fill="none" stroke="#374151" stroke-width="2"/>
+        <line x1="90" y1="35" x2="115" y2="35" stroke="#374151" stroke-width="2"/>
+        <text x="2" y="24" font-size="11" fill="#3b5bdb" font-family="monospace">A</text>
+        <text x="2" y="54" font-size="11" fill="#3b5bdb" font-family="monospace">B</text>
+        <text x="108" y="31" font-size="11" fill="#15803d" font-family="monospace">Y</text>
+      </svg>
+      <div class="gate-expr">Y = A + B</div>
+      <table class="gate-tt">
+        <tr><th>A</th><th>B</th><th>Y</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td></tr>
+      </table>
+    </div>
+
+    <!-- NOT Gate -->
+    <div class="gate-card">
+      <h5>NOT Gate (Inverter)</h5>
+      <svg width="120" height="70" viewBox="0 0 120 70">
+        <line x1="5" y1="35" x2="30" y2="35" stroke="#374151" stroke-width="2"/>
+        <polygon points="30,15 30,55 80,35" fill="none" stroke="#374151" stroke-width="2"/>
+        <circle cx="85" cy="35" r="5" fill="none" stroke="#374151" stroke-width="2"/>
+        <line x1="90" y1="35" x2="115" y2="35" stroke="#374151" stroke-width="2"/>
+        <text x="1" y="31" font-size="11" fill="#3b5bdb" font-family="monospace">A</text>
+        <text x="108" y="31" font-size="11" fill="#15803d" font-family="monospace">Y</text>
+      </svg>
+      <div class="gate-expr">Y = A'</div>
+      <table class="gate-tt">
+        <tr><th>A</th><th>Y</th></tr>
+        <tr><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>0</td></tr>
+      </table>
+    </div>
+
+    <!-- NAND Gate -->
+    <div class="gate-card">
+      <h5>NAND Gate ★ Universal</h5>
+      <svg width="120" height="70" viewBox="0 0 120 70">
+        <line x1="10" y1="20" x2="40" y2="20" stroke="#374151" stroke-width="2"/>
+        <line x1="10" y1="50" x2="40" y2="50" stroke="#374151" stroke-width="2"/>
+        <line x1="40" y1="10" x2="40" y2="60" stroke="#374151" stroke-width="2"/>
+        <line x1="40" y1="10" x2="65" y2="10" stroke="#374151" stroke-width="2"/>
+        <line x1="40" y1="60" x2="65" y2="60" stroke="#374151" stroke-width="2"/>
+        <path d="M65 10 A25 25 0 0 1 65 60" fill="none" stroke="#374151" stroke-width="2"/>
+        <circle cx="95" cy="35" r="5" fill="none" stroke="#374151" stroke-width="2"/>
+        <line x1="100" y1="35" x2="115" y2="35" stroke="#374151" stroke-width="2"/>
+        <text x="5" y="24" font-size="11" fill="#3b5bdb" font-family="monospace">A</text>
+        <text x="5" y="54" font-size="11" fill="#3b5bdb" font-family="monospace">B</text>
+        <text x="108" y="31" font-size="11" fill="#15803d" font-family="monospace">Y</text>
+      </svg>
+      <div class="gate-expr">Y = (A · B)'</div>
+      <table class="gate-tt">
+        <tr><th>A</th><th>B</th><th>Y</th></tr>
+        <tr><td>0</td><td>0</td><td>1</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td></tr>
+      </table>
+    </div>
+
+    <!-- NOR Gate -->
+    <div class="gate-card">
+      <h5>NOR Gate ★ Universal</h5>
+      <svg width="120" height="70" viewBox="0 0 120 70">
+        <line x1="10" y1="20" x2="37" y2="20" stroke="#374151" stroke-width="2"/>
+        <line x1="10" y1="50" x2="37" y2="50" stroke="#374151" stroke-width="2"/>
+        <path d="M34 10 Q49 35 34 60" fill="none" stroke="#374151" stroke-width="2"/>
+        <path d="M34 10 Q67 10 86 35" fill="none" stroke="#374151" stroke-width="2"/>
+        <path d="M34 60 Q67 60 86 35" fill="none" stroke="#374151" stroke-width="2"/>
+        <circle cx="91" cy="35" r="5" fill="none" stroke="#374151" stroke-width="2"/>
+        <line x1="96" y1="35" x2="115" y2="35" stroke="#374151" stroke-width="2"/>
+        <text x="2" y="24" font-size="11" fill="#3b5bdb" font-family="monospace">A</text>
+        <text x="2" y="54" font-size="11" fill="#3b5bdb" font-family="monospace">B</text>
+        <text x="108" y="31" font-size="11" fill="#15803d" font-family="monospace">Y</text>
+      </svg>
+      <div class="gate-expr">Y = (A + B)'</div>
+      <table class="gate-tt">
+        <tr><th>A</th><th>B</th><th>Y</th></tr>
+        <tr><td>0</td><td>0</td><td>1</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td></tr>
+      </table>
+    </div>
+
+    <!-- XOR Gate -->
+    <div class="gate-card">
+      <h5>XOR Gate</h5>
+      <svg width="120" height="70" viewBox="0 0 120 70">
+        <line x1="10" y1="20" x2="40" y2="20" stroke="#374151" stroke-width="2"/>
+        <line x1="10" y1="50" x2="40" y2="50" stroke="#374151" stroke-width="2"/>
+        <!-- extra curved line for XOR -->
+        <path d="M30 10 Q45 35 30 60" fill="none" stroke="#374151" stroke-width="2"/>
+        <path d="M37 10 Q52 35 37 60" fill="none" stroke="#374151" stroke-width="2"/>
+        <path d="M37 10 Q72 10 92 35" fill="none" stroke="#374151" stroke-width="2"/>
+        <path d="M37 60 Q72 60 92 35" fill="none" stroke="#374151" stroke-width="2"/>
+        <line x1="92" y1="35" x2="115" y2="35" stroke="#374151" stroke-width="2"/>
+        <text x="2" y="24" font-size="11" fill="#3b5bdb" font-family="monospace">A</text>
+        <text x="2" y="54" font-size="11" fill="#3b5bdb" font-family="monospace">B</text>
+        <text x="108" y="31" font-size="11" fill="#15803d" font-family="monospace">Y</text>
+      </svg>
+      <div class="gate-expr">Y = A ⊕ B</div>
+      <table class="gate-tt">
+        <tr><th>A</th><th>B</th><th>Y</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td></tr>
+      </table>
+    </div>
+
+  </div><!-- end gates-grid -->
+
+  <div class="warn block" style="margin-top:12px;">
+    <div class="block-title">Universal Gates — Why NAND and NOR?</div>
+    <p>NAND and NOR are called <strong>universal gates</strong> because ANY Boolean function (AND, OR, NOT, XOR, …) can be built using only NAND gates (or only NOR gates). This is important in chip manufacturing — you only need one type of gate to build an entire CPU.</p>
+    <p>NOT using NAND: &nbsp;<code>A' = NAND(A, A)</code><br>
+    AND using NAND: &nbsp;<code>A·B = NAND(NAND(A,B), NAND(A,B))</code><br>
+    OR using NAND: &nbsp;&nbsp;<code>A+B = NAND(NAND(A,A), NAND(B,B))</code></p>
+  </div>
+</div>
+
+<!-- BOOLEAN FUNCTIONS, LITERAL, MINTERM, MAXTERM, DNF, CNF -->
+<h3 class="section-title" id="bool-func">1.3a Boolean Functions, Literals, Minterms, Maxterms, DNF &amp; CNF</h3>
+
+<h4>Boolean Function</h4>
+<div class="def block">
+  <div class="block-title">Definition – Boolean Function</div>
+  <p>A <strong>Boolean function</strong> of n variables is a mapping f : {0,1}ⁿ → {0,1}.</p>
+  <ul>
+    <li>n variables → 2ⁿ possible input combinations (rows in truth table)</li>
+    <li>Each row can independently output 0 or 1 → 2^(2ⁿ) possible distinct Boolean functions</li>
+  </ul>
+  <table>
+    <tr><th>n (variables)</th><th>Input combinations (2ⁿ)</th><th>Distinct functions (2^(2ⁿ))</th></tr>
+    <tr><td>1</td><td>2</td><td>4</td></tr>
+    <tr><td>2</td><td>4</td><td>16</td></tr>
+    <tr><td>3</td><td>8</td><td>256</td></tr>
+  </table>
+</div>
+
+<h4>Literal</h4>
+<div class="def block">
+  <div class="block-title">Definition – Literal</div>
+  <p>A <strong>literal</strong> is a variable or the complement of a variable.</p>
+  <p>For variable x: literals are x (positive literal) and x' or ¬x (negative literal).</p>
+  <p>Example: In expression AB' + A'C, the literals are A, B', A', C.</p>
+</div>
+
+<h4>Elementary Product &amp; Elementary Sum</h4>
+<div class="def block">
+  <div class="block-title">Definitions</div>
+  <p><strong>Elementary Product (Fundamental Product):</strong> AND of one or more literals, where no variable appears more than once.</p>
+  <p>Examples: A, AB', A'BC, x'yz</p>
+  <p><strong>Elementary Sum (Fundamental Sum):</strong> OR of one or more literals, where no variable appears more than once.</p>
+  <p>Examples: A, A+B', A'+B+C'</p>
+</div>
+
+<h4>Minterm</h4>
+<div class="def block">
+  <div class="block-title">Definition – Minterm</div>
+  <p>A <strong>minterm</strong> of n variables is an elementary product in which <em>every</em> variable appears exactly once (either complemented or not).</p>
+  <ul>
+    <li>For n variables: there are exactly 2ⁿ minterms, labelled m₀, m₁, …, m_{2ⁿ-1}</li>
+    <li>Minterm mᵢ evaluates to <strong>1 only</strong> for the input combination whose binary value equals i; it is 0 for all other inputs</li>
+  </ul>
+  <p><strong>Minterms for 2 variables (A, B):</strong></p>
+  <table>
+    <tr><th>Row i</th><th>A</th><th>B</th><th>Minterm mᵢ</th><th>Expression</th></tr>
+    <tr><td>0</td><td>0</td><td>0</td><td>m₀</td><td>A'B'</td></tr>
+    <tr><td>1</td><td>0</td><td>1</td><td>m₁</td><td>A'B</td></tr>
+    <tr><td>2</td><td>1</td><td>0</td><td>m₂</td><td>AB'</td></tr>
+    <tr><td>3</td><td>1</td><td>1</td><td>m₃</td><td>AB</td></tr>
+  </table>
+  <p><em>Rule:</em> For minterm mᵢ, write each variable complemented if its bit in i is 0, and uncomplemented if the bit is 1.</p>
+</div>
+
+<h4>Maxterm</h4>
+<div class="def block">
+  <div class="block-title">Definition – Maxterm</div>
+  <p>A <strong>maxterm</strong> of n variables is an elementary sum in which <em>every</em> variable appears exactly once.</p>
+  <ul>
+    <li>Maxterm Mᵢ evaluates to <strong>0 only</strong> for the input combination whose binary value equals i; it is 1 for all others</li>
+    <li>Key relationship: Mᵢ = (mᵢ)' — maxterm is the complement of the corresponding minterm</li>
+  </ul>
+  <p><strong>Maxterms for 2 variables:</strong></p>
+  <table>
+    <tr><th>Row i</th><th>A</th><th>B</th><th>Maxterm Mᵢ</th><th>Expression</th></tr>
+    <tr><td>0</td><td>0</td><td>0</td><td>M₀</td><td>A+B</td></tr>
+    <tr><td>1</td><td>0</td><td>1</td><td>M₁</td><td>A+B'</td></tr>
+    <tr><td>2</td><td>1</td><td>0</td><td>M₂</td><td>A'+B</td></tr>
+    <tr><td>3</td><td>1</td><td>1</td><td>M₃</td><td>A'+B'</td></tr>
+  </table>
+  <p><em>Rule:</em> For maxterm Mᵢ, write each variable uncomplemented if its bit in i is 0, and complemented if the bit is 1 — opposite of minterm.</p>
+</div>
+
+<h4>Disjunctive Normal Form (DNF) — Sum of Products (SOP)</h4>
+<div class="def block">
+  <div class="block-title">Definition – DNF / Canonical SOP</div>
+  <p><strong>DNF</strong> (Canonical DNF) = OR of all minterms for which the function outputs 1.</p>
+  <p>Written: f = Σm(list of row indices where f=1)</p>
+  <p><strong>Steps to find DNF from a truth table:</strong></p>
+  <ol>
+    <li>Write out the truth table for f</li>
+    <li>Identify every row where f = 1</li>
+    <li>Write the minterm for each such row</li>
+    <li>OR all those minterms together</li>
+  </ol>
+  <p>Every Boolean function has a unique canonical DNF.</p>
+</div>
+
+<h4>Conjunctive Normal Form (CNF) — Product of Sums (POS)</h4>
+<div class="def block">
+  <div class="block-title">Definition – CNF / Canonical POS</div>
+  <p><strong>CNF</strong> (Canonical CNF) = AND of all maxterms for which the function outputs 0.</p>
+  <p>Written: f = ΠM(list of row indices where f=0)</p>
+  <p><strong>Steps to find CNF:</strong></p>
+  <ol>
+    <li>Write out the truth table for f</li>
+    <li>Identify every row where f = 0</li>
+    <li>Write the maxterm for each such row</li>
+    <li>AND all those maxterms together</li>
+  </ol>
+  <p>Every Boolean function has a unique canonical CNF.</p>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Worked Example – Find DNF and CNF for f(A,B) = A ∨ B</div>
+  <table>
+    <tr><th>Row</th><th>A</th><th>B</th><th>f=A+B</th><th>Minterm</th><th>Maxterm</th></tr>
+    <tr><td>0</td><td>0</td><td>0</td><td><strong>0</strong></td><td>m₀=A'B'</td><td>M₀=A+B</td></tr>
+    <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>m₁=A'B</td><td>M₁=A+B'</td></tr>
+    <tr><td>2</td><td>1</td><td>0</td><td>1</td><td>m₂=AB'</td><td>M₂=A'+B</td></tr>
+    <tr><td>3</td><td>1</td><td>1</td><td>1</td><td>m₃=AB</td><td>M₃=A'+B'</td></tr>
+  </table>
+  <p><strong>DNF:</strong> f = Σm(1,2,3) = A'B + AB' + AB</p>
+  <p><strong>CNF:</strong> f = ΠM(0) = (A+B)</p>
+  <p>Both simplify to A+B — consistent! ✓</p>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – DNF, CNF, Minterms, Maxterms</div>
+
+  <details>
+    <summary>Q1. Find the canonical DNF and CNF for f(A,B) where f=1 only when A=1,B=0.</summary>
+    <div class="solution-body">
+      <table>
+        <tr><th>A</th><th>B</th><th>f</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td></tr>
+      </table>
+      <p><strong>DNF:</strong> f = 1 only at row 2 (A=1,B=0). Minterm m₂ = AB'.</p>
+      <p>f = Σm(2) = AB'</p>
+      <p><strong>CNF:</strong> f = 0 at rows 0,1,3. Maxterms: M₀=A+B, M₁=A+B', M₃=A'+B'.</p>
+      <p>f = ΠM(0,1,3) = (A+B)(A+B')(A'+B')</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Express f(A,B,C) = Σm(1,4,5,7) as a product of maxterms (CNF).</summary>
+    <div class="solution-body">
+      <p>DNF uses minterms at rows 1,4,5,7. So CNF uses maxterms at ALL OTHER rows: 0,2,3,6.</p>
+      <p>Rows where f=0: 0,2,3,6.</p>
+      <p>Maxterms (3 variables A,B,C):</p>
+      <p>M₀ = A+B+C (row 000)</p>
+      <p>M₂ = A+B'+C (row 010)</p>
+      <p>M₃ = A+B'+C' (row 011)</p>
+      <p>M₆ = A'+B+C' (row 110)</p>
+      <p><strong>f = ΠM(0,2,3,6) = (A+B+C)(A+B'+C)(A+B'+C')(A'+B+C')</strong></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3. How many minterms and maxterms exist for a 3-variable Boolean function?</summary>
+    <div class="solution-body">
+      <p>For n=3 variables (A,B,C): 2³ = <strong>8 minterms</strong> (m₀ to m₇) and <strong>8 maxterms</strong> (M₀ to M₇).</p>
+      <p>And there are 2^8 = 256 possible distinct Boolean functions of 3 variables.</p>
+    </div>
+  </details>
+</div>
+
+<!-- K-MAP -->
+<h3 class="section-title" id="kmap">1.3b Karnaugh Map (K-map)</h3>
+
+<p>A <strong>Karnaugh Map (K-map)</strong> is a graphical method to simplify Boolean expressions without algebraic manipulation. It works by visually grouping adjacent minterms whose combined expression simplifies.</p>
+
+<div class="def block">
+  <div class="block-title">Key Rules for K-map Simplification</div>
+  <ul>
+    <li>Cells are arranged in <strong>Gray code order</strong> so adjacent cells differ by exactly 1 bit</li>
+    <li>Group <strong>1s</strong> in rectangles of size 1, 2, 4, 8, … (must be powers of 2) → gives simplified <strong>DNF</strong></li>
+    <li>Group <strong>0s</strong> similarly → gives simplified <strong>CNF</strong></li>
+    <li>Groups must be rectangular (or wrap around edges — K-map is a torus)</li>
+    <li>Make groups as <strong>large as possible</strong>; use fewest groups possible</li>
+    <li>Each group of 2ᵏ cells eliminates k variables from the term</li>
+    <li>A cell can belong to multiple groups</li>
+  </ul>
+</div>
+
+<h4>K-map Layout for 2 Variables</h4>
+<div class="ex block">
+  <div class="block-title">2-Variable K-map</div>
+  <pre>
+        B=0    B=1
+A=0  [  m₀  |  m₁  ]
+A=1  [  m₂  |  m₃  ]
+  </pre>
+  <p>Adjacent cells (differ by 1 bit): m₀↔m₁, m₀↔m₂, m₁↔m₃, m₂↔m₃, and wrap-around edges.</p>
+</div>
+
+<h4>K-map for 3 Variables</h4>
+<div class="def block">
+  <div class="block-title">3-Variable K-map Layout (2 rows × 4 columns)</div>
+  <p>One variable on rows (A), two variables on columns (BC) in Gray code order: 00, 01, 11, 10</p>
+  <pre>
+         BC=00  BC=01  BC=11  BC=10
+  A=0  [  m₀  |  m₁  |  m₃  |  m₂  ]
+  A=1  [  m₄  |  m₅  |  m₇  |  m₆  ]
+  </pre>
+  <p><em>Note:</em> The columns are NOT in binary order — they use Gray code (00,01,11,10) so adjacent columns always differ by 1 bit. This is essential for the method to work correctly.</p>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Worked Example – Simplify f(A,B,C) = Σm(0,1,3,7) using 3-variable K-map</div>
+  <p><strong>Step 1: Fill in the K-map</strong></p>
+  <pre>
+         BC=00  BC=01  BC=11  BC=10
+  A=0  [  1   |  1   |  1   |  0   ]   ← m₀=1, m₁=1, m₃=1, m₂=0
+  A=1  [  0   |  0   |  1   |  0   ]   ← m₄=0, m₅=0, m₇=1, m₆=0
+  </pre>
+  <p><strong>Step 2: Identify groups of 1s</strong></p>
+  <ul>
+    <li><strong>Group 1 (size 2):</strong> m₀, m₁ → A=0, BC=00 and BC=01 → A is fixed at 0, C varies, B=0 → <strong>A'B'</strong></li>
+    <li><strong>Group 2 (size 2):</strong> m₁, m₃ → A=0, BC=01 and BC=11 → A=0, B varies, C=1 → <strong>A'C</strong></li>
+    <li><strong>Group 3 (size 2):</strong> m₃, m₇ → BC=11, A varies → B=1, C=1 → <strong>BC</strong></li>
+  </ul>
+  <p><strong>Step 3: OR all groups together</strong></p>
+  <p><strong>f = A'B' + A'C + BC</strong></p>
+  <p>Compare to the raw DNF: m₀+m₁+m₃+m₇ = A'B'C' + A'B'C + A'BC + ABC — much longer! K-map gives the minimal form. ✓</p>
+</div>
+
+<div class="ex block">
+  <div class="block-title">Example – Group Sizes and What They Eliminate</div>
+  <table>
+    <tr><th>Group Size</th><th>Variables Eliminated</th><th>Variables Remaining in Term</th></tr>
+    <tr><td>1 (single cell)</td><td>0</td><td>All n (full minterm)</td></tr>
+    <tr><td>2 cells</td><td>1</td><td>n−1</td></tr>
+    <tr><td>4 cells</td><td>2</td><td>n−2</td></tr>
+    <tr><td>8 cells (all in 3-var map)</td><td>3</td><td>0 → f = 1 (tautology)</td></tr>
+  </table>
+</div>
+
+<div class="qa block">
+  <div class="block-title">Practice Questions – K-map</div>
+
+  <details>
+    <summary>Q1. Use a 3-variable K-map to simplify f(A,B,C) = Σm(0,2,4,6).</summary>
+    <div class="solution-body">
+      <p>Fill K-map:</p>
+      <pre>
+         BC=00  BC=01  BC=11  BC=10
+  A=0  [  1   |  0   |  0   |  1   ]   m₀=1, m₁=0, m₃=0, m₂=1
+  A=1  [  1   |  0   |  0   |  1   ]   m₄=1, m₅=0, m₇=0, m₆=1
+      </pre>
+      <p>Group all four 1s: m₀,m₂,m₄,m₆ — these are BC=00 and BC=10 columns, both rows.</p>
+      <p>In these cells: A varies (0,1), B varies (0,1), C = 0 always.</p>
+      <p>The common factor: <strong>C' (C=0)</strong></p>
+      <p><strong>f = C'</strong> — the function is simply 1 whenever C=0.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2. Simplify f(A,B,C) = Σm(1,3,5,7) using K-map.</summary>
+    <div class="solution-body">
+      <pre>
+         BC=00  BC=01  BC=11  BC=10
+  A=0  [  0   |  1   |  1   |  0   ]   m₁=1, m₃=1
+  A=1  [  0   |  1   |  1   |  0   ]   m₅=1, m₇=1
+      </pre>
+      <p>Group all four 1s: m₁,m₃,m₅,m₇ — BC=01 and BC=11 columns, both rows.</p>
+      <p>In all these cells: C=1 always. A and B vary.</p>
+      <p><strong>f = C</strong> — true whenever C=1.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3. Find the simplified DNF for f(A,B,C) = Σm(0,1,2,3,6).</summary>
+    <div class="solution-body">
+      <pre>
+         BC=00  BC=01  BC=11  BC=10
+  A=0  [  1   |  1   |  1   |  1   ]   m₀,m₁,m₃,m₂ = all 1
+  A=1  [  1   |  0   |  0   |  1   ]   m₄=1, m₅=0, m₇=0, m₆=1
+      </pre>
+      <p><strong>Group 1 (size 4):</strong> Entire A=0 row → m₀,m₁,m₂,m₃ → A=0 → term: <strong>A'</strong></p>
+      <p><strong>Group 2 (size 2):</strong> m₀,m₄ (BC=00 column) → B=0,C=0 → term: <strong>B'C'</strong></p>
+      <p><strong>Group 3 (size 2):</strong> m₂,m₆ (BC=10 column) → B=1,C=0 → term: <strong>BC'</strong></p>
+      <p>Note: m₀ is covered by both Group 1 and 2 (allowed). m₂ covered by both Group 1 and 3.</p>
+      <p><strong>f = A' + B'C' + BC'</strong></p>
+      <p>This can further simplify: B'C' + BC' = C'(B'+B) = C'. So f = A' + C'.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q4. Why must K-map groups have sizes that are powers of 2?</summary>
+    <div class="solution-body">
+      <p>Because we need to eliminate exactly one variable per doubling. Each time a group doubles in size, one variable changes across the group (0→1 or 1→0), so it can be eliminated from the simplified term.</p>
+      <p>For example: a group of 2 cells → 1 variable eliminated. Group of 4 → 2 variables eliminated. Group of 3 cells would not correspond to any clean Boolean simplification.</p>
+    </div>
+  </details>
+</div>
 
 <div class="ex block">
   <div class="block-title">Example – Simplify Boolean Expression</div>
